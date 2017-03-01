@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
         String appVersion = "v1";
         Backendless.initApp( this, YOUR_APP_ID, YOUR_SECRET_KEY, appVersion );
 
-        
+
 
     }
 }
