@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     // GoogleApiClient mGoogleApiClient = null;
 
     //TEST COMMIT TEST COMMIT TEST COMMIT TEST COMMIT TEST COMMIT
+    //TEST COMMIT
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
