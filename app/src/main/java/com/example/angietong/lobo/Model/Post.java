@@ -10,6 +10,7 @@ public class Post {
         imageURI = imagePath;
         imageTitle = title;
     }
+    public Post(){}
 
     public String getImageURI() {
         return imageURI;
