@@ -1,14 +1,27 @@
 package com.example.angietong.lobo.Model;
 
+import com.backendless.geo.GeoPoint;
+
 public class Post {
 
     private String imageTitle;
     private String imageURI;
 
-    public Post(String imagePath, String title)
+    public GeoPoint getLoc() {
+        return loc;
+    }
+
+    public void setLoc(GeoPoint loc) {
+        this.loc = loc;
+    }
+
+    private GeoPoint loc;
+
+    public Post(String imagePath, String title, GeoPoint g)
     {
         imageURI = imagePath;
         imageTitle = title;
+        loc = g;
     }
     public Post(){}
 
