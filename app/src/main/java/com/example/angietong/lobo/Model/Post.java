@@ -6,15 +6,6 @@ public class Post {
 
     private String imageTitle;
     private String imageURI;
-
-    public GeoPoint getLoc() {
-        return loc;
-    }
-
-    public void setLoc(GeoPoint loc) {
-        this.loc = loc;
-    }
-
     private GeoPoint loc;
 
     public Post(String imagePath, String title, GeoPoint g)
@@ -39,6 +30,14 @@ public class Post {
 
     public void setImageTitle(String imageTitle) {
         this.imageTitle = imageTitle;
+    }
+
+    public GeoPoint getLoc() {
+        return loc;
+    }
+
+    public void setLoc(GeoPoint loc) {
+        this.loc = loc;
     }
 
 }

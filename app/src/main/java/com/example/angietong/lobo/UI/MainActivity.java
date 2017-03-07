@@ -56,9 +56,10 @@ public class MainActivity extends AppCompatActivity {
         //buildGoogleAPIClient();
 
         //TEST setArray and getPostArray HERE
-        setPost("bullshit1", "bullshit2", (Math.random() * 140.0 * -1), (Math.random() * 140.0));
+       /* setPost("bullshit1", "bullshit2", (Math.random() * 140.0 * -1), (Math.random() * 140.0));
         setPost("bullshit3123", "bullshi3123t2", (Math.random() * 140.0 * -1), (Math.random() * 140.0));
-        setPost("bulls1412hit1", "bull41234shit2", (Math.random() * 140.0 * -1), (Math.random() * 140.0));
+        setPost("bulls1412hit1", "bull41234shit2", (Math.random() * 140.0 * -1), (Math.random() * 140.0));*/
+        getPostArray();
     }
 
 //    private void buildGoogleAPIClient() {
@@ -90,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
                 retrivedArray = postBackendlessCollection.getCurrentPage();
                 for (Post p:retrivedArray)
                 {
-                    Log.d(TAG, p.getImageTitle() + " | " + p.getImageURI());
+                    Log.d(TAG, p.getImageTitle() + " | " + p.getImageURI() + " | " + p.getLoc().getLatitudeE6());
                     setMarker(p);
                 }
             }
