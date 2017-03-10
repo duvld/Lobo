@@ -28,4 +28,6 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile files('libs/backendless.jar')
     compile 'com.google.android.gms:play-services-maps:10.2.0'
+    compile 'com.google.android.gms:play-services-location:10.2.0'
+
 }
