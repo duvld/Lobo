@@ -1,13 +1,17 @@
 package com.example.angietong.lobo.UI;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,6 +19,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import com.google.android.gms.location.LocationServices;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessCollection;
@@ -30,6 +35,7 @@ import com.example.angietong.lobo.Model.Post;
 import com.example.angietong.lobo.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -62,6 +68,11 @@ public class MainActivity extends AppCompatActivity {
     private ImageView mPostImage = null;
     private RelativeLayout mMiniPost = null;
 
+    //LOCATION VARIABLES
+    public GoogleApiClient mGoogleApiClient = null;
+    private static final int FINE_LOCATION_PERMISSION_REQUEST = 1;
+    public Location mLastLocation;
+
     //TODO: Don't use global variables
     private String mBackendlessURL;
 
@@ -88,22 +99,22 @@ public class MainActivity extends AppCompatActivity {
         mMiniPost.bringToFront();
         mMiniPost.setVisibility(View.INVISIBLE);
 
-        //buildGoogleAPIClient();
+        buildGoogleAPIClient();
 
         //TEST setArray and getPostArray HERE
         getPostArray();
     }
 
-//    private void buildGoogleAPIClient() {
-//
-//        if (mGoogleApiClient == null) {
-//            mGoogleApiClient = new GoogleApiClient.Builder(this)
-//                    .addConnectionCallbacks(n)
-//                    .addOnConnectionFailedListener(n)
-//                    .addApi(LocationServices.API)
-//                    .build();
-//        }
-//    }
+    private void buildGoogleAPIClient() {
+
+        if (mGoogleApiClient == null) {
+            mGoogleApiClient = new GoogleApiClient.Builder(this)
+                    .addConnectionCallbacks(n)
+                    .addOnConnectionFailedListener(n)
+                    .addApi(LocationServices.API)
+                    .build();
+        }
+    }
 
     public void createPost(View view)
     {
@@ -199,6 +210,34 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void findLocation() {
+        if (ContextCompat.checkSelfPermission(this,
+                android.Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this,
+                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
+                    FINE_LOCATION_PERMISSION_REQUEST);
+        } else {
+            mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+            LatLng latlng = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, 13));
+            mMap.setMyLocationEnabled(true);
+        }
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case FINE_LOCATION_PERMISSION_REQUEST: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    findLocation();
+                }
+            }
+        }
+    }
+
     public void setMarker(Post p)
     {
         mMap.addMarker(new MarkerOptions()
@@ -207,13 +246,27 @@ public class MainActivity extends AppCompatActivity {
                 .setTag(p);
     }
 
+    protected void onStart() {
+        mGoogleApiClient.connect();
+        super.onStart();
+    }
+    protected void onStop() {
+        mGoogleApiClient.disconnect();
+        super.onStop();
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        buildGoogleAPIClient();
+    }
+
     class Callbacks implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
             OnMapReadyCallback, AsyncCallback<Post>, GoogleMap.OnMarkerClickListener, GoogleMap.OnMapClickListener
     {
 
         @Override
         public void onConnected(Bundle bundle) {
-
+            findLocation();
         }
 
         @Override
