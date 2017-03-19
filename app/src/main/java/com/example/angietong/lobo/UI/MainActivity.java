@@ -79,12 +79,19 @@ public class MainActivity extends AppCompatActivity {
     private String mBackendlessFileURL;
     // GoogleApiClient mGoogleApiClient = null;
 
+    VerticalViewPager mVerticalViewPager;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //SETTING UP THE SWIPE FRAGMENT
+        mVerticalViewPager = (VerticalViewPager)findViewById(R.id.viewPager);
+        SwipeAdapter swipeAdapter = new SwipeAdapter(getSupportFragmentManager());
+        mVerticalViewPager.setAdapter(swipeAdapter);
+
         String appVersion = "v1";
         Backendless.initApp( this, BACKENDLESS_APP_ID, BACKENDLESS_SECRET_KEY, appVersion );
 
