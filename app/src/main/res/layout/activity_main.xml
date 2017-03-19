@@ -25,6 +25,11 @@
         android:id="@+id/createPostButton"
         android:onClick="createPost"/>
 
+    <com.example.angietong.lobo.UI.VerticalViewPager
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/viewPager"/>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="140dp"
@@ -32,10 +37,7 @@
         android:background="#AA000000"
         android:id="@+id/activity_miniPost">
 
-        <com.example.angietong.lobo.UI.VerticalViewPager
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/viewPager"/>
+
 
         <ImageView
             android:layout_width="100dp"
