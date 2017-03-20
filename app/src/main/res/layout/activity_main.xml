@@ -24,51 +24,52 @@
         tools:context="com.example.mapwithmarker.MapsMarkerActivity"
         android:id="@+id/map" />
 
-    <!-- Bottom Toolbar with icons
-        Currently unclickable buttons, use ImageButton
-        Set proper alignments-->
+    <!-- Bottom Toolbar with icons -->
     <RelativeLayout
         android:id="@+id/bottomToolbar"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="75dp"
         android:layout_alignParentBottom="true"
         android:weightSum="3"
         android:background="#006622">
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/userButton"
             android:src="@drawable/usericon"
             android:contentDescription="@string/app_name"
+            android:clickable="true"
             android:layout_width="150dp"
             android:layout_height="100dp"
-            android:padding="20dp"
+            android:padding="15dp"
             android:layout_alignParentLeft="true"/>
 
         <ImageView
             android:id="@+id/createPostButton"
             android:src="@drawable/cambutton"
             android:contentDescription="@string/app_name"
-            android:layout_width="500dp"
-            android:layout_height="100dp"/>
+            android:clickable="true"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerHorizontal="true"/>
 
         <ImageView
             android:id="@+id/nearbyButton"
             android:src="@drawable/nearbyicon"
             android:contentDescription="@string/app_name"
+            android:clickable="true"
             android:layout_width="150dp"
             android:layout_height="100dp"
-            android:padding="15dp"
-            android:layout_alignParentRight="true"/>
+            android:padding="10dp"
+            android:layout_alignParentEnd="true"/>
 
     </RelativeLayout>
 
-    <!-- Image view on click
-        #90006622 > first two digits are transparency ie. 90 -->
+    <!-- Image view on click -->
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="140dp"
+        android:layout_height="150dp"
         android:layout_alignParentBottom="true"
-        android:background="#90006622"
+        android:background="#006622"
         android:id="@+id/activity_miniPost">
 
         <ImageView
@@ -90,6 +91,7 @@
             android:id="@+id/postTextView"
             android:layout_alignParentTop="true"
             android:layout_alignParentStart="true" />
+
     </RelativeLayout>
 
 </RelativeLayout>
