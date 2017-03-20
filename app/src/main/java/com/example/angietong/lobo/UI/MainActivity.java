@@ -43,6 +43,7 @@ import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import org.w3c.dom.Text;
 
@@ -66,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
     private Bitmap mImage;
     private TextView mPostText = null;
     private ImageView mPostImage = null;
-    private RelativeLayout mMiniPost = null;
+    private SlidingUpPanelLayout mMiniPost = null;
 
     //LOCATION VARIABLES
     public GoogleApiClient mGoogleApiClient = null;
@@ -89,8 +90,6 @@ public class MainActivity extends AppCompatActivity {
 
         //SETTING UP THE SWIPE FRAGMENT
         mVerticalViewPager = (VerticalViewPager)findViewById(R.id.viewPager);
-        SwipeAdapter swipeAdapter = new SwipeAdapter(getSupportFragmentManager());
-        mVerticalViewPager.setAdapter(swipeAdapter);
 
         String appVersion = "v1";
         Backendless.initApp( this, BACKENDLESS_APP_ID, BACKENDLESS_SECRET_KEY, appVersion );
@@ -101,10 +100,21 @@ public class MainActivity extends AppCompatActivity {
 
         mPostText = (TextView) findViewById(R.id.postTextView);
         mPostImage = (ImageView) findViewById(R.id.postImageView);
-        mMiniPost = (RelativeLayout) findViewById(R.id.activity_miniPost);
+        mMiniPost = (SlidingUpPanelLayout) findViewById(R.id.activity_miniPost);
         mPostText.bringToFront();
         mMiniPost.bringToFront();
         mMiniPost.setVisibility(View.INVISIBLE);
+
+        if (mMiniPost.getVisibility() == View.VISIBLE) {
+            mMiniPost.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //SETTING UP THE SWIPE FRAGMENT
+                    SwipeAdapter swipeAdapter = new SwipeAdapter(getSupportFragmentManager());
+                    mVerticalViewPager.setAdapter(swipeAdapter);
+                }
+            });
+        }
 
         buildGoogleAPIClient();
 
