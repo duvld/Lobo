@@ -7,6 +7,14 @@
     android:screenOrientation="portrait"
     tools:context="com.example.angietong.lobo.UI.MainActivity">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/my_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"/>
+
     <!-- Map Fragment -->
     <fragment
         android:name="com.google.android.gms.maps.MapFragment"
@@ -16,22 +24,51 @@
         tools:context="com.example.mapwithmarker.MapsMarkerActivity"
         android:id="@+id/map" />
 
-    <!-- Camera Button -->
-    <ImageView
-        android:src="@drawable/cambutton"
-        android:contentDescription="@string/app_name"
-        android:layout_width="100dp"
+    <!-- Bottom Toolbar with icons
+        Currently unclickable buttons, use ImageButton
+        Set proper alignments-->
+    <RelativeLayout
+        android:id="@+id/bottomToolbar"
+        android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/createPostButton"/>
+        android:weightSum="3"
+        android:background="#006622">
 
-    <!-- Pin Clicked Fragments -->
+        <ImageView
+            android:id="@+id/imageView"
+            android:src="@drawable/usericon"
+            android:contentDescription="@string/app_name"
+            android:layout_width="150dp"
+            android:layout_height="100dp"
+            android:padding="20dp"
+            android:layout_alignParentLeft="true"/>
+
+        <ImageView
+            android:id="@+id/createPostButton"
+            android:src="@drawable/cambutton"
+            android:contentDescription="@string/app_name"
+            android:layout_width="500dp"
+            android:layout_height="100dp"/>
+
+        <ImageView
+            android:id="@+id/nearbyButton"
+            android:src="@drawable/nearbyicon"
+            android:contentDescription="@string/app_name"
+            android:layout_width="150dp"
+            android:layout_height="100dp"
+            android:padding="15dp"
+            android:layout_alignParentRight="true"/>
+
+    </RelativeLayout>
+
+    <!-- Image view on click
+        #90006622 > first two digits are transparency ie. 90 -->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="140dp"
         android:layout_alignParentBottom="true"
-        android:background="#AA000000"
+        android:background="#90006622"
         android:id="@+id/activity_miniPost">
 
         <ImageView
@@ -49,7 +86,6 @@
             android:layout_height="match_parent"
             android:layout_width="240dp"
             android:text="@string/app_name"
-            android:textAlignment="center"
             android:textColor="#ffffffff"
             android:id="@+id/postTextView"
             android:layout_alignParentTop="true"

@@ -1,5 +1,6 @@
 package com.example.angietong.lobo.UI;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -9,6 +10,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -34,6 +36,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -53,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
     private Bitmap mImage;
     private TextView mPostText = null;
     private ImageView mPostImage = null;
-    private ImageView mCamButton = null;
+    private RelativeLayout mBtmToolbar = null;
     private RelativeLayout mMiniPost = null;
 
     //LOCATION VARIABLES
@@ -67,6 +70,10 @@ public class MainActivity extends AppCompatActivity {
     private String mBackendlessFileURL;
     // GoogleApiClient mGoogleApiClient = null;
 
+    // Create Map Style
+    String styleString = "[{\"featureType\":\"water\",\"elementType\":\"geometry\",\"stylers\":[{\"hue\":\"#165c64\"},{\"saturation\":34},{\"lightness\":-69},{\"visibility\":\"on\"}]},{\"featureType\":\"landscape\",\"elementType\":\"geometry\",\"stylers\":[{\"hue\":\"#b7caaa\"},{\"saturation\":-14},{\"lightness\":-18},{\"visibility\":\"on\"}]},{\"featureType\":\"landscape.man_made\",\"elementType\":\"all\",\"stylers\":[{\"hue\":\"#cbdac1\"},{\"saturation\":-6},{\"lightness\":-9},{\"visibility\":\"on\"}]},{\"featureType\":\"road\",\"elementType\":\"geometry\",\"stylers\":[{\"hue\":\"#8d9b83\"},{\"saturation\":-89},{\"lightness\":-12},{\"visibility\":\"on\"}]},{\"featureType\":\"road.highway\",\"elementType\":\"geometry\",\"stylers\":[{\"hue\":\"#d4dad0\"},{\"saturation\":-88},{\"lightness\":54},{\"visibility\":\"simplified\"}]},{\"featureType\":\"road.arterial\",\"elementType\":\"geometry\",\"stylers\":[{\"hue\":\"#bdc5b6\"},{\"saturation\":-89},{\"lightness\":-3},{\"visibility\":\"simplified\"}]},{\"featureType\":\"road.local\",\"elementType\":\"geometry\",\"stylers\":[{\"hue\":\"#bdc5b6\"},{\"saturation\":-89},{\"lightness\":-26},{\"visibility\":\"on\"}]},{\"featureType\":\"poi\",\"elementType\":\"geometry\",\"stylers\":[{\"hue\":\"#c17118\"},{\"saturation\":61},{\"lightness\":-45},{\"visibility\":\"on\"}]},{\"featureType\":\"poi.park\",\"elementType\":\"all\",\"stylers\":[{\"hue\":\"#8ba975\"},{\"saturation\":-46},{\"lightness\":-28},{\"visibility\":\"on\"}]},{\"featureType\":\"transit\",\"elementType\":\"geometry\",\"stylers\":[{\"hue\":\"#a43218\"},{\"saturation\":74},{\"lightness\":-51},{\"visibility\":\"simplified\"}]},{\"featureType\":\"administrative.province\",\"elementType\":\"all\",\"stylers\":[{\"hue\":\"#ffffff\"},{\"saturation\":0},{\"lightness\":100},{\"visibility\":\"simplified\"}]},{\"featureType\":\"administrative.neighborhood\",\"elementType\":\"all\",\"stylers\":[{\"hue\":\"#ffffff\"},{\"saturation\":0},{\"lightness\":100},{\"visibility\":\"off\"}]},{\"featureType\":\"administrative.locality\",\"elementType\":\"labels\",\"stylers\":[{\"hue\":\"#ffffff\"},{\"saturation\":0},{\"lightness\":100},{\"visibility\":\"off\"}]},{\"featureType\":\"administrative.land_parcel\",\"elementType\":\"all\",\"stylers\":[{\"hue\":\"#ffffff\"},{\"saturation\":0},{\"lightness\":100},{\"visibility\":\"off\"}]},{\"featureType\":\"administrative\",\"elementType\":\"all\",\"stylers\":[{\"hue\":\"#3a3935\"},{\"saturation\":5},{\"lightness\":-57},{\"visibility\":\"off\"}]},{\"featureType\":\"poi.medical\",\"elementType\":\"geometry\",\"stylers\":[{\"hue\":\"#cba923\"},{\"saturation\":50},{\"lightness\":-46},{\"visibility\":\"on\"}]}]";
+    public MapStyleOptions style = new MapStyleOptions(styleString);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -75,17 +82,20 @@ public class MainActivity extends AppCompatActivity {
         String appVersion = "v1";
         Backendless.initApp( this, BACKENDLESS_APP_ID, BACKENDLESS_SECRET_KEY, appVersion );
 
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
+
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(n);
 
         mPostText = (TextView) findViewById(R.id.postTextView);
         mPostImage = (ImageView) findViewById(R.id.postImageView);
-        mCamButton = (ImageView) findViewById(R.id.createPostButton);
+        mBtmToolbar = (RelativeLayout) findViewById(R.id.bottomToolbar);
         mMiniPost = (RelativeLayout) findViewById(R.id.activity_miniPost);
         mPostText.bringToFront();
         mMiniPost.bringToFront();
         mMiniPost.setVisibility(View.INVISIBLE);
-        mCamButton.setVisibility(View.VISIBLE);
+        mBtmToolbar.setVisibility(View.VISIBLE);
 
         buildGoogleAPIClient();
 
@@ -274,9 +284,11 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onMapReady(GoogleMap googleMap) {
+            googleMap.setMapStyle(style);
             mMap = googleMap;
             mMap.setOnMarkerClickListener(n);
             mMap.setOnMapClickListener(n);
+
         }
 
         @Override
@@ -293,7 +305,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public boolean onMarkerClick(Marker marker) {
             try {
-                mCamButton.setVisibility(View.INVISIBLE);
+                mBtmToolbar.setVisibility(View.INVISIBLE);
                 Log.d(TAG, "IM IN MARKER CLICKER LISTENRE");
                 mMiniPost.setVisibility(View.VISIBLE); mMiniPost.bringToFront();
                 Post temp = (Post) marker.getTag();
@@ -306,7 +318,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onMapClick(LatLng latLng) {
             mMiniPost.setVisibility(View.INVISIBLE);
-            mCamButton.setVisibility(View.VISIBLE);
+            mBtmToolbar.setVisibility(View.VISIBLE);
         }
     }
 
