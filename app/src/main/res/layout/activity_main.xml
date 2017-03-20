@@ -7,7 +7,7 @@
     android:screenOrientation="portrait"
     tools:context="com.example.angietong.lobo.UI.MainActivity">
 
-
+    <!-- Map Fragment -->
     <fragment
         android:name="com.google.android.gms.maps.MapFragment"
         android:layout_width="match_parent"
@@ -16,15 +16,17 @@
         tools:context="com.example.mapwithmarker.MapsMarkerActivity"
         android:id="@+id/map" />
 
-    <Button
-        android:text="Capture"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <!-- Camera Button -->
+    <ImageView
+        android:src="@drawable/cambutton"
+        android:contentDescription="@string/app_name"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:id="@+id/createPostButton"
-        android:onClick="createPost"/>
+        android:id="@+id/createPostButton"/>
 
+    <!-- Pin Clicked Fragments -->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="140dp"
@@ -33,19 +35,20 @@
         android:id="@+id/activity_miniPost">
 
         <ImageView
+            android:id="@+id/postImageView"
+            android:contentDescription="@string/app_name"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_alignParentTop="true"
-            android:layout_toEndOf="@+id/postTextView"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:id="@+id/postImageView" />
+            android:layout_toEndOf="@+id/postTextView"/>
 
         <TextView
             android:paddingTop="20dp"
             android:layout_height="match_parent"
             android:layout_width="240dp"
-            android:text="TEST ETS TRSTT ESTST EST"
+            android:text="@string/app_name"
             android:textAlignment="center"
             android:textColor="#ffffffff"
             android:id="@+id/postTextView"

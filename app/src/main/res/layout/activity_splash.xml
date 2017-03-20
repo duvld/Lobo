@@ -5,12 +5,15 @@
     android:layout_height="match_parent"
     android:background="#006622">
 
+    <!-- Display icon -->
     <ImageView
         android:id="@+id/splashicon"
+        android:src="@drawable/icon"
+        android:contentDescription=""
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:src="@drawable/icon"/>
+        android:layout_centerHorizontal="true"/>
+
 
 </RelativeLayout>

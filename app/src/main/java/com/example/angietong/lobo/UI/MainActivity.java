@@ -3,13 +3,8 @@ package com.example.angietong.lobo.UI;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.location.Location;
-import android.net.Uri;
-import android.os.Environment;
-import android.os.SystemClock;
 import android.provider.MediaStore;
-import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -19,46 +14,38 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.google.android.gms.location.LocationServices;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessCollection;
-import com.backendless.BackendlessUser;
-import com.backendless.Geo;
-import com.backendless.Persistence;
 import com.backendless.async.callback.AsyncCallback;
-import com.backendless.async.callback.BackendlessCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.files.BackendlessFile;
 import com.backendless.geo.GeoPoint;
+
 import com.example.angietong.lobo.Model.Post;
 import com.example.angietong.lobo.R;
+
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import org.w3c.dom.Text;
-
 import java.io.File;
-import java.io.IOException;
-import java.security.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
-
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String BACKENDLESS_APP_ID = "5B5E6CAE-0C25-19FE-FF24-600425E97500";
     private static final String BACKENDLESS_SECRET_KEY = "DE82CF74-A7CF-9241-FF82-04CD84301800";
     private static final String TAG = "mainAct";
-    private static final int CAPTURE_IMAGE_RESULT = 001;
+    //private static final int CAPTURE_IMAGE_RESULT = 001;
 
     private Callbacks n = new Callbacks();
     private List<Post> retrivedArray;
@@ -66,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
     private Bitmap mImage;
     private TextView mPostText = null;
     private ImageView mPostImage = null;
+    private ImageView mCamButton = null;
     private RelativeLayout mMiniPost = null;
 
     //LOCATION VARIABLES
@@ -79,25 +67,25 @@ public class MainActivity extends AppCompatActivity {
     private String mBackendlessFileURL;
     // GoogleApiClient mGoogleApiClient = null;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         String appVersion = "v1";
         Backendless.initApp( this, BACKENDLESS_APP_ID, BACKENDLESS_SECRET_KEY, appVersion );
 
-        MapFragment mapFragment = (MapFragment) getFragmentManager()
-                .findFragmentById(R.id.map);
+        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(n);
 
         mPostText = (TextView) findViewById(R.id.postTextView);
         mPostImage = (ImageView) findViewById(R.id.postImageView);
+        mCamButton = (ImageView) findViewById(R.id.createPostButton);
         mMiniPost = (RelativeLayout) findViewById(R.id.activity_miniPost);
         mPostText.bringToFront();
         mMiniPost.bringToFront();
         mMiniPost.setVisibility(View.INVISIBLE);
+        mCamButton.setVisibility(View.VISIBLE);
 
         buildGoogleAPIClient();
 
@@ -244,6 +232,11 @@ public class MainActivity extends AppCompatActivity {
                 .title(p.getImageTitle())
                 .position(new LatLng(p.getLoc().getLatitude(), p.getLoc().getLongitude())))
                 .setTag(p);
+        // Current Location Marker
+        mMap.addMarker(new MarkerOptions()
+                .title(p.getImageTitle())
+                .position(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude())))
+                .setTag(p);
     }
 
     protected void onStart() {
@@ -300,6 +293,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public boolean onMarkerClick(Marker marker) {
             try {
+                mCamButton.setVisibility(View.INVISIBLE);
                 Log.d(TAG, "IM IN MARKER CLICKER LISTENRE");
                 mMiniPost.setVisibility(View.VISIBLE); mMiniPost.bringToFront();
                 Post temp = (Post) marker.getTag();
@@ -312,6 +306,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onMapClick(LatLng latLng) {
             mMiniPost.setVisibility(View.INVISIBLE);
+            mCamButton.setVisibility(View.VISIBLE);
         }
     }
 
