@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Environment;
@@ -16,9 +17,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.example.angietong.lobo.Model.PostUtil;
 import com.google.android.gms.location.LocationServices;
 
 import com.backendless.Backendless;
@@ -61,12 +66,19 @@ public class MainActivity extends AppCompatActivity {
     private static final int CAPTURE_IMAGE_RESULT = 001;
 
     private Callbacks n = new Callbacks();
-    private List<Post> retrivedArray;
+    private List < Post > retrivedArray;
     private GoogleMap mMap;
     private Bitmap mImage;
     private TextView mPostText = null;
     private ImageView mPostImage = null;
     private RelativeLayout mMiniPost = null;
+
+    //Pre Post Layout Variables
+    RelativeLayout mPrePostGroup = null;
+    TextView mPrePostTitle = null;
+    ImageView mPrePostImage = null;
+    private Button mOkButton = null;
+    private Button mNoButton = null;
 
     //LOCATION VARIABLES
     public GoogleApiClient mGoogleApiClient = null;
@@ -75,6 +87,8 @@ public class MainActivity extends AppCompatActivity {
 
     //TODO: Don't use global variables
     private String mBackendlessURL;
+
+    private String mNewPostImagePath;
 
     private String mBackendlessFileURL;
     // GoogleApiClient mGoogleApiClient = null;
@@ -86,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         String appVersion = "v1";
-        Backendless.initApp( this, BACKENDLESS_APP_ID, BACKENDLESS_SECRET_KEY, appVersion );
+        Backendless.initApp(this, BACKENDLESS_APP_ID, BACKENDLESS_SECRET_KEY, appVersion);
 
         MapFragment mapFragment = (MapFragment) getFragmentManager()
                 .findFragmentById(R.id.map);
@@ -95,6 +109,15 @@ public class MainActivity extends AppCompatActivity {
         mPostText = (TextView) findViewById(R.id.postTextView);
         mPostImage = (ImageView) findViewById(R.id.postImageView);
         mMiniPost = (RelativeLayout) findViewById(R.id.activity_miniPost);
+
+        mPrePostGroup = (RelativeLayout) findViewById(R.id.prePostViewGroup);
+        mPrePostTitle = (TextView) findViewById(R.id.prePostTitleTextView);
+        mPrePostImage = (ImageView) findViewById(R.id.prePostImageView);
+        mPrePostGroup.setVisibility(View.INVISIBLE);
+        mPrePostGroup.setEnabled(false);
+        mOkButton = (Button) findViewById(R.id.okButton);
+        mNoButton = (Button) findViewById(R.id.noButton);
+
         mPostText.bringToFront();
         mMiniPost.bringToFront();
         mMiniPost.setVisibility(View.INVISIBLE);
@@ -116,22 +139,36 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void createPost(View view)
+    //ON CLICK FOR CAPTURE BUTTONS
+    public void okButtonFunction(View view)
     {
+        Log.d(TAG, "OKButton");
+        mPrePostGroup.setEnabled(false);
+        mPrePostGroup.setVisibility(View.INVISIBLE);
+        mPrePostImage.setImageBitmap(null);
+        createPost();
+
+    }
+    public void noButtonFunction(View view)
+    {
+        Log.d(TAG, "NOButton");
+        mPrePostGroup.setEnabled(false);
+        mPrePostGroup.setVisibility(View.INVISIBLE);
+        mPrePostImage.setImageBitmap(null);
+    }
+
+    public void createPost() {
         Post postToSave = new Post();
 
         try {
 
             //Temporary
             postToSave.setImageTitle(Long.toString(System.currentTimeMillis()));
-            postToSave.setLoc(new GeoPoint(-43.6532, 79.3832));
-
-            String tmp = launchCameraIntent();
-            postToSave.setImageURI(tmp);
-
+            postToSave.setLoc(new GeoPoint(mLastLocation.getLatitude(), mLastLocation.getLongitude()));
+            Log.d(TAG, "Create post: " + mBackendlessFileURL);
+            postToSave.setImageURI(mBackendlessFileURL);
             Backendless.Persistence.save(postToSave, n);
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         Log.d(TAG, "in the post method");
@@ -140,64 +177,138 @@ public class MainActivity extends AppCompatActivity {
     /**
      * TODO: Camera Activity TO BE OPTIMIZED
      * */
-    public String launchCameraIntent() throws Exception {
+    //    public String launchCameraIntent() throws Exception {
+    //
+    //        Intent launchCameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+    //
+    //
+    //
+    //
+    //        //TODO: Retrieve String from thread (NO GLOBAL VARIABLES)
+    //        Thread t = new Thread(new Runnable() {
+    //            @Override
+    //            public void run() {
+    //
+    //                File f = new File("/sdcard/DCIM/Camera/IMG_20170308_183820.jpg");
+    //                try {
+    //                    mBackendlessFileURL = Backendless.Files.upload(f, "media").getFileURL();
+    //                } catch (Exception e) {
+    //                    e.printStackTrace();
+    //                }
+    //                Log.d(TAG, mBackendlessFileURL);
+    //
+    //            }
+    //        });
+    //
+    //        t.start();
+    //        Log.d(TAG, "Before " + mBackendlessFileURL);
+    //        t.join();
+    //        Log.d(TAG, "After " + mBackendlessFileURL);
+    //        return(mBackendlessFileURL);
+    //    }
 
-        Intent launchCameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
+    public void launchCameraIntent(View view) {
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (cameraIntent.resolveActivity(getPackageManager()) != null) {
+            Log.d(TAG, "launchCamera1");
+            File image = null;
+            File fileDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
 
+            try {
 
+                String prefix = Long.toString(System.currentTimeMillis());
+                image = File.createTempFile(prefix, ".JPG", fileDir);
+                Log.d(TAG, "launchCamera2");
 
-        //TODO: Retrieve String from thread (NO GLOBAL VARIABLES)
-        Thread t = new Thread(new Runnable() {
-            @Override
-            public void run() {
-
-                File f = new File("/sdcard/DCIM/Camera/IMG_20170308_183820.jpg");
-                try {
-                    mBackendlessFileURL = Backendless.Files.upload(f, "media").getFileURL();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                Log.d(TAG, mBackendlessFileURL);
-
+            } catch (Exception e) {
+                Log.d(TAG, "launchCamera3");
+                e.printStackTrace();
             }
-        });
 
-        t.start();
-        Log.d(TAG, "Before " + mBackendlessFileURL);
-        t.join();
-        Log.d(TAG, "After " + mBackendlessFileURL);
-        return(mBackendlessFileURL);
+            if (image != null) {
+                final Uri deviceImageURI = Uri.fromFile(image);
+
+                mNewPostImagePath = image.getPath();
+
+                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, deviceImageURI);
+                startActivityForResult(cameraIntent, CAPTURE_IMAGE_RESULT);
+            }
+        }
     }
 
 
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d(TAG, requestCode + " " + CAPTURE_IMAGE_RESULT + " | " + resultCode + " " + RESULT_OK);
 
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//    if (requestCode == CAPTURE_IMAGE_RESULT)
-//        if (requestCode ==  RESULT_OK)
-//        {
-//            try {
-//                Uri deviecUri = data.getData();
-//                mImage = BitmapFactory.decodeStream(getContentResolver().openInputStream(deviecUri));
-//                Log.d(TAG, "onActivityResult");
-//                Backendless.Files.Android.upload(mImage, Bitmap.CompressFormat.JPEG, 100, Long.toString(System.currentTimeMillis()), "media");
-//            } catch (Exception e) {
-//                Log.d(TAG, "onActivityResult din work");
-//                e.printStackTrace();
-//            }
-//        }
-//    }
+        Log.d(TAG, mNewPostImagePath);
+        mImage = BitmapFactory.decodeFile(mNewPostImagePath);
+        Matrix matrix = new Matrix();
+        matrix.postRotate(90);
+        Bitmap compressedImage = Bitmap.createScaledBitmap(mImage, mImage.getWidth() / 4, mImage.getHeight() / 4, false);
+        mImage = Bitmap.createBitmap(compressedImage, 0, 0, compressedImage.getWidth(), compressedImage.getHeight(), matrix, false);
 
-    public void getPostArray()
-    {
 
-        Backendless.Persistence.of(Post.class).find(new AsyncCallback<BackendlessCollection<Post>>() {
+        try {
+            AsyncCallback responder = new AsyncCallback() {
+                @Override
+                public void handleResponse(Object o) {
+                    BackendlessFile bf = (BackendlessFile) o;
+                    mBackendlessFileURL = bf.getFileURL();
+                    Log.d(TAG, "It saved | " + mBackendlessFileURL);
+                    setPrePost();
+                }
+
+                @Override
+                public void handleFault(BackendlessFault backendlessFault) {
+                    Log.d(TAG, "it didnt save" + backendlessFault.toString());
+                }
+
+            };
+            setPrePost();
+
+            Backendless.Files.Android.upload(mImage, Bitmap.CompressFormat.JPEG, 50, Long.toString(System.currentTimeMillis()), "media", responder);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        //temp - reduce image quality
+        //Backendless.Files.Android.upload(mImage, Bitmap.CompressFormat.JPEG, 50, Long.toString(System.currentTimeMillis()), "media", responder);
+    }
+
+    private void setPrePost() {
+        mPrePostGroup.setEnabled(true);
+        mPrePostGroup.setVisibility(View.VISIBLE);
+
+        mPrePostImage.setImageBitmap(mImage);
+        mPrePostGroup.bringToFront();
+    }
+
+
+    //    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    //    if (requestCode == CAPTURE_IMAGE_RESULT)
+    //        if (requestCode ==  RESULT_OK)
+    //        {
+    //            try {
+    //                Uri deviecUri = data.getData();
+    //                mImage = BitmapFactory.decodeStream(getContentResolver().openInputStream(deviecUri));
+    //                Log.d(TAG, "onActivityResult");
+    //                Backendless.Files.Android.upload(mImage, Bitmap.CompressFormat.JPEG, 100, Long.toString(System.currentTimeMillis()), "media");
+    //            } catch (Exception e) {
+    //                Log.d(TAG, "onActivityResult din work");
+    //                e.printStackTrace();
+    //            }
+    //        }
+    //    }
+
+    public void getPostArray() {
+
+        Backendless.Persistence.of(Post.class).find(new AsyncCallback < BackendlessCollection < Post >> () {
             @Override
-            public void handleResponse(BackendlessCollection<Post> postBackendlessCollection) {
+            public void handleResponse(BackendlessCollection < Post > postBackendlessCollection) {
 
                 retrivedArray = postBackendlessCollection.getCurrentPage();
-                for (Post p:retrivedArray)
-                {
+                for (Post p: retrivedArray) {
                     Log.d(TAG, p.getImageTitle() + " | " + p.getImageURI() + " | " + p.getLoc().getLatitudeE6());
                     setMarker(p);
                 }
@@ -205,18 +316,19 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void handleFault(BackendlessFault backendlessFault) {
-
+                Log.d(TAG, "GETTING POST ARRAY FAILED" + backendlessFault);
             }
         });
     }
 
     private void findLocation() {
         if (ContextCompat.checkSelfPermission(this,
-                android.Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
+                android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
             ActivityCompat.requestPermissions(this,
-                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
+                    new String[] {
+                            android.Manifest.permission.ACCESS_FINE_LOCATION
+                    },
                     FINE_LOCATION_PERMISSION_REQUEST);
         } else {
             mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
@@ -230,7 +342,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
-            case FINE_LOCATION_PERMISSION_REQUEST: {
+            case FINE_LOCATION_PERMISSION_REQUEST:
+            {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     findLocation();
                 }
@@ -238,8 +351,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void setMarker(Post p)
-    {
+    public void setMarker(Post p) {
         mMap.addMarker(new MarkerOptions()
                 .title(p.getImageTitle())
                 .position(new LatLng(p.getLoc().getLatitude(), p.getLoc().getLongitude())))
@@ -261,8 +373,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     class Callbacks implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
-            OnMapReadyCallback, AsyncCallback<Post>, GoogleMap.OnMarkerClickListener, GoogleMap.OnMapClickListener
-    {
+            OnMapReadyCallback, AsyncCallback < Post > , GoogleMap.OnMarkerClickListener, GoogleMap.OnMapClickListener {
 
         @Override
         public void onConnected(Bundle bundle) {
@@ -301,11 +412,15 @@ public class MainActivity extends AppCompatActivity {
         public boolean onMarkerClick(Marker marker) {
             try {
                 Log.d(TAG, "IM IN MARKER CLICKER LISTENRE");
-                mMiniPost.setVisibility(View.VISIBLE); mMiniPost.bringToFront();
+                mMiniPost.setVisibility(View.VISIBLE);
+                mMiniPost.bringToFront();
                 Post temp = (Post) marker.getTag();
                 Log.d(TAG, "MY IMAGE IS FROM: " + temp.getImageURI());
-                mPostText.setText(temp.getImageTitle()); mPostImage.setImageBitmap(temp.getImage());
-            } catch (Exception e) {e.printStackTrace();}
+                mPostText.setText(temp.getImageTitle());
+                mPostImage.setImageBitmap(PostUtil.getImageFromURL(temp.getImageURI()));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             return false;
         }
 
@@ -315,8 +430,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    class ImageUploadCallback implements AsyncCallback<BackendlessFile>
-    {
+    class ImageUploadCallback implements AsyncCallback < BackendlessFile > {
         String imageURL = null;
         @Override
         public void handleResponse(BackendlessFile backendlessFile) {
@@ -335,12 +449,9 @@ public class MainActivity extends AppCompatActivity {
         }
 
         public String getImageURL() {
-            Log.d(TAG,"getImageURL" + imageURL);
+            Log.d(TAG, "getImageURL" + imageURL);
             return imageURL;
         }
 
     }
 }
-
-
-

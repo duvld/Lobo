@@ -23,7 +23,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:id="@+id/createPostButton"
-        android:onClick="createPost"/>
+        android:onClick="launchCameraIntent"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -51,6 +51,65 @@
             android:id="@+id/postTextView"
             android:layout_alignParentTop="true"
             android:layout_alignParentStart="true" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/prePostViewGroup"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@+id/activity_miniPost"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:orientation="vertical"
+        android:background="#007733">
+
+        <TextView
+            android:id="@+id/prePostTitleTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            android:layout_alignParentTop="true"/>
+
+        <ImageView
+            android:id="@+id/prePostImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/prePostTitleTextView"
+            android:layout_centerHorizontal="true"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:background="@android:color/background_dark"
+            android:layout_weight="1"
+            android:layout_alignParentBottom="true">
+
+            <Button
+                android:id="@+id/noButton"
+                android:layout_alignParentLeft="true"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:onClick="noButtonFunction"
+                android:text="NO"/>
+
+            <Button
+                android:id="@+id/okButton"
+                android:layout_alignParentRight="true"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:onClick="okButtonFunction"
+                android:text="OK"
+                />
+        </RelativeLayout>
     </RelativeLayout>
 
 </RelativeLayout>
