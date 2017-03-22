@@ -15,8 +15,10 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -46,6 +48,7 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -66,12 +69,20 @@ public class MainActivity extends AppCompatActivity {
     private static final int CAPTURE_IMAGE_RESULT = 001;
 
     private Callbacks n = new Callbacks();
-    private List < Post > retrivedArray;
+    private List <Post> retrivedArray;
     private GoogleMap mMap;
     private Bitmap mImage;
+
+    // Bottom Tool Bar and Buttons
+    private RelativeLayout mBtmToolbar = null;
+    private ImageView mNearbyButton = null;
+    private ImageView mCameraButton = null;
+    private ImageView mUserButton = null;
+
+    // Image Viewer
+    private RelativeLayout mMiniPost = null;
     private TextView mPostText = null;
     private ImageView mPostImage = null;
-    private RelativeLayout mMiniPost = null;
 
     //Pre Post Layout Variables
     RelativeLayout mPrePostGroup = null;
@@ -80,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
     private Button mOkButton = null;
     private Button mNoButton = null;
 
-    //LOCATION VARIABLES
+    // Location Variables
     public GoogleApiClient mGoogleApiClient = null;
     private static final int FINE_LOCATION_PERMISSION_REQUEST = 1;
     public Location mLastLocation;
@@ -89,12 +100,21 @@ public class MainActivity extends AppCompatActivity {
     private String mBackendlessURL;
 
     private String mNewPostImagePath;
-
     private String mBackendlessFileURL;
     // GoogleApiClient mGoogleApiClient = null;
 
+    // Create Map Style
+    String styleString = "[{\"featureType\":\"water\",\"elementType\":\"geometry\",\"stylers\":[{\"hue\":\"#165c64\"},{\"saturation\":34},{\"lightness\":-69},{\"visibility\":\"on\"}]},{\"featureType\":\"landscape\",\"elementType\":\"geometry\",\"stylers\":[{\"hue\":\"#b7caaa\"},{\"saturation\":-14},{\"lightness\":-18},{\"visibility\":\"on\"}]},{\"featureType\":\"landscape.man_made\",\"elementType\":\"all\",\"stylers\":[{\"hue\":\"#cbdac1\"},{\"saturation\":-6},{\"lightness\":-9},{\"visibility\":\"on\"}]},{\"featureType\":\"road\",\"elementType\":\"geometry\",\"stylers\":[{\"hue\":\"#8d9b83\"},{\"saturation\":-89},{\"lightness\":-12},{\"visibility\":\"on\"}]},{\"featureType\":\"road.highway\",\"elementType\":\"geometry\",\"stylers\":[{\"hue\":\"#d4dad0\"},{\"saturation\":-88},{\"lightness\":54},{\"visibility\":\"simplified\"}]},{\"featureType\":\"road.arterial\",\"elementType\":\"geometry\",\"stylers\":[{\"hue\":\"#bdc5b6\"},{\"saturation\":-89},{\"lightness\":-3},{\"visibility\":\"simplified\"}]},{\"featureType\":\"road.local\",\"elementType\":\"geometry\",\"stylers\":[{\"hue\":\"#bdc5b6\"},{\"saturation\":-89},{\"lightness\":-26},{\"visibility\":\"on\"}]},{\"featureType\":\"poi\",\"elementType\":\"geometry\",\"stylers\":[{\"hue\":\"#c17118\"},{\"saturation\":61},{\"lightness\":-45},{\"visibility\":\"on\"}]},{\"featureType\":\"poi.park\",\"elementType\":\"all\",\"stylers\":[{\"hue\":\"#8ba975\"},{\"saturation\":-46},{\"lightness\":-28},{\"visibility\":\"on\"}]},{\"featureType\":\"transit\",\"elementType\":\"geometry\",\"stylers\":[{\"hue\":\"#a43218\"},{\"saturation\":74},{\"lightness\":-51},{\"visibility\":\"simplified\"}]},{\"featureType\":\"administrative.province\",\"elementType\":\"all\",\"stylers\":[{\"hue\":\"#ffffff\"},{\"saturation\":0},{\"lightness\":100},{\"visibility\":\"simplified\"}]},{\"featureType\":\"administrative.neighborhood\",\"elementType\":\"all\",\"stylers\":[{\"hue\":\"#ffffff\"},{\"saturation\":0},{\"lightness\":100},{\"visibility\":\"off\"}]},{\"featureType\":\"administrative.locality\",\"elementType\":\"labels\",\"stylers\":[{\"hue\":\"#ffffff\"},{\"saturation\":0},{\"lightness\":100},{\"visibility\":\"off\"}]},{\"featureType\":\"administrative.land_parcel\",\"elementType\":\"all\",\"stylers\":[{\"hue\":\"#ffffff\"},{\"saturation\":0},{\"lightness\":100},{\"visibility\":\"off\"}]},{\"featureType\":\"administrative\",\"elementType\":\"all\",\"stylers\":[{\"hue\":\"#3a3935\"},{\"saturation\":5},{\"lightness\":-57},{\"visibility\":\"off\"}]},{\"featureType\":\"poi.medical\",\"elementType\":\"geometry\",\"stylers\":[{\"hue\":\"#cba923\"},{\"saturation\":50},{\"lightness\":-46},{\"visibility\":\"on\"}]}]";
+    public MapStyleOptions style = new MapStyleOptions(styleString);
 
+    // API Client
+    private void buildGoogleAPIClient() {
+        if (mGoogleApiClient == null) {
+            mGoogleApiClient = new GoogleApiClient.Builder(this).addConnectionCallbacks(n).addOnConnectionFailedListener(n).addApi(LocationServices.API).build();
+        }
+    }
 
+    // Activity on Create
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,12 +122,23 @@ public class MainActivity extends AppCompatActivity {
         String appVersion = "v1";
         Backendless.initApp(this, BACKENDLESS_APP_ID, BACKENDLESS_SECRET_KEY, appVersion);
 
-        MapFragment mapFragment = (MapFragment) getFragmentManager()
-                .findFragmentById(R.id.map);
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
+
+        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(n);
 
+        // Bottom Tool Bar and Buttons
+        mBtmToolbar = (RelativeLayout) findViewById(R.id.bottomToolbar);
+        mNearbyButton = (ImageView) findViewById(R.id.nearbyButton);
+        mUserButton = (ImageView) findViewById(R.id.userButton);
+        mCameraButton = (ImageView) findViewById(R.id.createPostButton);
+
+        // Image Viewer
+        mMiniPost = (RelativeLayout) findViewById(R.id.activity_miniPost);
         mPostText = (TextView) findViewById(R.id.postTextView);
         mPostImage = (ImageView) findViewById(R.id.postImageView);
+
         mMiniPost = (RelativeLayout) findViewById(R.id.activity_miniPost);
 
         mPrePostGroup = (RelativeLayout) findViewById(R.id.prePostViewGroup);
@@ -121,22 +152,12 @@ public class MainActivity extends AppCompatActivity {
         mPostText.bringToFront();
         mMiniPost.bringToFront();
         mMiniPost.setVisibility(View.INVISIBLE);
+        mBtmToolbar.setVisibility(View.VISIBLE);
 
         buildGoogleAPIClient();
 
         //TEST setArray and getPostArray HERE
         getPostArray();
-    }
-
-    private void buildGoogleAPIClient() {
-
-        if (mGoogleApiClient == null) {
-            mGoogleApiClient = new GoogleApiClient.Builder(this)
-                    .addConnectionCallbacks(n)
-                    .addOnConnectionFailedListener(n)
-                    .addApi(LocationServices.API)
-                    .build();
-        }
     }
 
     //ON CLICK FOR CAPTURE BUTTONS
@@ -177,37 +198,6 @@ public class MainActivity extends AppCompatActivity {
     /**
      * TODO: Camera Activity TO BE OPTIMIZED
      * */
-    //    public String launchCameraIntent() throws Exception {
-    //
-    //        Intent launchCameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-    //
-    //
-    //
-    //
-    //        //TODO: Retrieve String from thread (NO GLOBAL VARIABLES)
-    //        Thread t = new Thread(new Runnable() {
-    //            @Override
-    //            public void run() {
-    //
-    //                File f = new File("/sdcard/DCIM/Camera/IMG_20170308_183820.jpg");
-    //                try {
-    //                    mBackendlessFileURL = Backendless.Files.upload(f, "media").getFileURL();
-    //                } catch (Exception e) {
-    //                    e.printStackTrace();
-    //                }
-    //                Log.d(TAG, mBackendlessFileURL);
-    //
-    //            }
-    //        });
-    //
-    //        t.start();
-    //        Log.d(TAG, "Before " + mBackendlessFileURL);
-    //        t.join();
-    //        Log.d(TAG, "After " + mBackendlessFileURL);
-    //        return(mBackendlessFileURL);
-    //    }
-
-
     public void launchCameraIntent(View view) {
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (cameraIntent.resolveActivity(getPackageManager()) != null) {
@@ -235,10 +225,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(cameraIntent, CAPTURE_IMAGE_RESULT);
             }
         }
-    }
-
-
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    }protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.d(TAG, requestCode + " " + CAPTURE_IMAGE_RESULT + " | " + resultCode + " " + RESULT_OK);
 
         Log.d(TAG, mNewPostImagePath);
@@ -285,27 +272,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    //    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-    //    if (requestCode == CAPTURE_IMAGE_RESULT)
-    //        if (requestCode ==  RESULT_OK)
-    //        {
-    //            try {
-    //                Uri deviecUri = data.getData();
-    //                mImage = BitmapFactory.decodeStream(getContentResolver().openInputStream(deviecUri));
-    //                Log.d(TAG, "onActivityResult");
-    //                Backendless.Files.Android.upload(mImage, Bitmap.CompressFormat.JPEG, 100, Long.toString(System.currentTimeMillis()), "media");
-    //            } catch (Exception e) {
-    //                Log.d(TAG, "onActivityResult din work");
-    //                e.printStackTrace();
-    //            }
-    //        }
-    //    }
 
-    public void getPostArray() {
 
-        Backendless.Persistence.of(Post.class).find(new AsyncCallback < BackendlessCollection < Post >> () {
+
+    public void getPostArray()
+    {
+
+        Backendless.Persistence.of(Post.class).find(new AsyncCallback<BackendlessCollection<Post>>() {
             @Override
-            public void handleResponse(BackendlessCollection < Post > postBackendlessCollection) {
+            public void handleResponse(BackendlessCollection<Post> postBackendlessCollection) {
 
                 retrivedArray = postBackendlessCollection.getCurrentPage();
                 for (Post p: retrivedArray) {
@@ -324,11 +299,8 @@ public class MainActivity extends AppCompatActivity {
     private void findLocation() {
         if (ContextCompat.checkSelfPermission(this,
                 android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
             ActivityCompat.requestPermissions(this,
-                    new String[] {
-                            android.Manifest.permission.ACCESS_FINE_LOCATION
-                    },
+                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
                     FINE_LOCATION_PERMISSION_REQUEST);
         } else {
             mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
@@ -342,8 +314,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
-            case FINE_LOCATION_PERMISSION_REQUEST:
-            {
+            case FINE_LOCATION_PERMISSION_REQUEST: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     findLocation();
                 }
@@ -351,7 +322,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void setMarker(Post p) {
+    public void setMarker(Post p)
+    {
         mMap.addMarker(new MarkerOptions()
                 .title(p.getImageTitle())
                 .position(new LatLng(p.getLoc().getLatitude(), p.getLoc().getLongitude())))
@@ -373,7 +345,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     class Callbacks implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
-            OnMapReadyCallback, AsyncCallback < Post > , GoogleMap.OnMarkerClickListener, GoogleMap.OnMapClickListener {
+            OnMapReadyCallback, AsyncCallback<Post>, GoogleMap.OnMarkerClickListener, GoogleMap.OnMapClickListener
+    {
 
         @Override
         public void onConnected(Bundle bundle) {
@@ -391,10 +364,20 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
+        // Map
         public void onMapReady(GoogleMap googleMap) {
+            googleMap.setMapStyle(style);
             mMap = googleMap;
-            mMap.setOnMarkerClickListener(n);
             mMap.setOnMapClickListener(n);
+            mMap.setOnMarkerClickListener(n);
+
+            // Bottom Toolbar Button Listeners
+            mUserButton.setOnClickListener(new OnClickListener() {
+                public void onClick(View v) {startActivity(new Intent(MainActivity.this, Splash.class));}});
+            mCameraButton.setOnClickListener(new OnClickListener() {
+                public void onClick(View v) {startActivity(new Intent(MainActivity.this, PostActivity.class));}});
+            mNearbyButton.setOnClickListener(new OnClickListener() {
+                public void onClick(View v) {startActivity(new Intent(MainActivity.this, Splash.class));}});
         }
 
         @Override
@@ -411,36 +394,35 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public boolean onMarkerClick(Marker marker) {
             try {
+                mBtmToolbar.setVisibility(View.INVISIBLE);
                 Log.d(TAG, "IM IN MARKER CLICKER LISTENRE");
-                mMiniPost.setVisibility(View.VISIBLE);
-                mMiniPost.bringToFront();
+                mMiniPost.setVisibility(View.VISIBLE); mMiniPost.bringToFront();
                 Post temp = (Post) marker.getTag();
                 Log.d(TAG, "MY IMAGE IS FROM: " + temp.getImageURI());
-                mPostText.setText(temp.getImageTitle());
-                mPostImage.setImageBitmap(PostUtil.getImageFromURL(temp.getImageURI()));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+                mPostText.setText(temp.getImageTitle()); mPostImage.setImageBitmap(temp.getImage());
+            } catch (Exception e) {e.printStackTrace();}
             return false;
         }
 
         @Override
         public void onMapClick(LatLng latLng) {
             mMiniPost.setVisibility(View.INVISIBLE);
+            mBtmToolbar.setVisibility(View.VISIBLE);
         }
     }
 
-    class ImageUploadCallback implements AsyncCallback < BackendlessFile > {
+    class ImageUploadCallback implements AsyncCallback<BackendlessFile>
+    {
         String imageURL = null;
         @Override
         public void handleResponse(BackendlessFile backendlessFile) {
-            Log.d(TAG, "UPLOADED " + backendlessFile.getFileURL());
+            Log.d(TAG, "Uploaded " + backendlessFile.getFileURL());
             setImageURL(backendlessFile.getFileURL());
         }
 
         @Override
         public void handleFault(BackendlessFault backendlessFault) {
-            Log.d(TAG, "DID NT UPLOADED");
+            Log.d(TAG, "Did not upload");
         }
 
         public void setImageURL(String imageURL) {
@@ -449,9 +431,12 @@ public class MainActivity extends AppCompatActivity {
         }
 
         public String getImageURL() {
-            Log.d(TAG, "getImageURL" + imageURL);
+            Log.d(TAG,"getImageURL" + imageURL);
             return imageURL;
         }
 
     }
 }
+
+
+
