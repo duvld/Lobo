@@ -77,6 +77,8 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "mainAct";
     private static final int CAPTURE_IMAGE_RESULT = 001;
 
+    SlidingUpPanelLayout main = null;
+
     private Callbacks n = new Callbacks();
     private List <Post> retrivedArray;
     private GoogleMap mMap;
@@ -157,6 +159,9 @@ public class MainActivity extends AppCompatActivity {
 
         mOkButton = (Button) findViewById(R.id.okButton);
         mNoButton = (Button) findViewById(R.id.noButton);
+
+        main = (SlidingUpPanelLayout) findViewById(R.id.activity_main);
+        main.setDragView(mMiniPost);
 
         mPostText.bringToFront();
         mMiniPost.bringToFront();
@@ -437,7 +442,9 @@ public class MainActivity extends AppCompatActivity {
             try {
                 mBtmToolbar.setVisibility(View.INVISIBLE);
                 Log.d(TAG, "IM IN MARKER CLICKER LISTENRE");
-                mMiniPost.setVisibility(View.VISIBLE); mMiniPost.bringToFront();
+                mMiniPost.setVisibility(View.VISIBLE);
+                mMiniPost.bringToFront();
+                main.setPanelHeight(mMiniPost.getHeight());
                 Post temp = (Post) marker.getTag();
                 Log.d(TAG, "MY IMAGE IS FROM: " + temp.getImageURI());
                 mPostText.setText(temp.getImageTitle());
@@ -450,6 +457,7 @@ public class MainActivity extends AppCompatActivity {
         public void onMapClick(LatLng latLng) {
             mMiniPost.setVisibility(View.INVISIBLE);
             mBtmToolbar.setVisibility(View.VISIBLE);
+            main.setPanelHeight(mBtmToolbar.getHeight());
         }
     }
 
