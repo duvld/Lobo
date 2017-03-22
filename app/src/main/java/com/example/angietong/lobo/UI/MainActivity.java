@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessCollection;
@@ -46,7 +47,10 @@ import java.security.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+/*TODO:
+(Bug Fixes)
 
+*/
 public class MainActivity extends AppCompatActivity {
 
     private static final String BACKENDLESS_APP_ID = "5B5E6CAE-0C25-19FE-FF24-600425E97500";
@@ -190,6 +194,8 @@ public class MainActivity extends AppCompatActivity {
                     Log.d(TAG, p.getImageTitle() + " | " + p.getImageURI() + " | " + p.getLoc().getLatitudeE6());
                     setMarker(p);
                 }
+
+                Toast.makeText(MainActivity.this, "REFRESHING!", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -231,6 +237,14 @@ public class MainActivity extends AppCompatActivity {
             mMap = googleMap;
             mMap.setOnMarkerClickListener(n);
             mMap.setOnMapClickListener(n);
+
+            // Bottom Toolbar Button Listeners
+            mUserButton.setOnClickListener(new OnClickListener() {
+                public void onClick(View v) {startActivity(new Intent(MainActivity.this, Splash.class));}});
+            mCameraButton.setOnClickListener(new OnClickListener() {
+                public void onClick(View v) {launchCameraIntent(null);}});
+            mNearbyButton.setOnClickListener(new OnClickListener() {
+                public void onClick(View v) {getPostArray();}});
         }
 
         @Override
@@ -251,7 +265,8 @@ public class MainActivity extends AppCompatActivity {
                 mMiniPost.setVisibility(View.VISIBLE); mMiniPost.bringToFront();
                 Post temp = (Post) marker.getTag();
                 Log.d(TAG, "MY IMAGE IS FROM: " + temp.getImageURI());
-                mPostText.setText(temp.getImageTitle()); mPostImage.setImageBitmap(temp.getImage());
+                mPostText.setText(temp.getImageTitle());
+                mPostImage.setImageBitmap(PostUtil.getImageFromURL(temp.getImageURI()));
             } catch (Exception e) {e.printStackTrace();}
             return false;
         }
