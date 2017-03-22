@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.location.Location;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.SystemClock;
@@ -13,6 +14,8 @@ import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
+import android.support.v4.widget.SlidingPaneLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -20,10 +23,12 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.angietong.lobo.Model.PostUtil;
 import com.google.android.gms.location.LocationServices;
@@ -51,6 +56,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import org.w3c.dom.Text;
 
@@ -60,7 +66,10 @@ import java.security.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+/*TODO:
+(Bug Fixes)
 
+*/
 public class MainActivity extends AppCompatActivity {
 
     private static final String BACKENDLESS_APP_ID = "5B5E6CAE-0C25-19FE-FF24-600425E97500";
@@ -85,9 +94,9 @@ public class MainActivity extends AppCompatActivity {
     private ImageView mPostImage = null;
 
     //Pre Post Layout Variables
-    RelativeLayout mPrePostGroup = null;
-    TextView mPrePostTitle = null;
-    ImageView mPrePostImage = null;
+    private RelativeLayout mPrePostGroup = null;
+    private EditText mPrePostTitle = null;
+    private ImageView mPrePostImage = null;
     private Button mOkButton = null;
     private Button mNoButton = null;
 
@@ -100,6 +109,7 @@ public class MainActivity extends AppCompatActivity {
     private String mBackendlessURL;
 
     private String mNewPostImagePath;
+    private String mPostTitle;
     private String mBackendlessFileURL;
     // GoogleApiClient mGoogleApiClient = null;
 
@@ -139,13 +149,12 @@ public class MainActivity extends AppCompatActivity {
         mPostText = (TextView) findViewById(R.id.postTextView);
         mPostImage = (ImageView) findViewById(R.id.postImageView);
 
-        mMiniPost = (RelativeLayout) findViewById(R.id.activity_miniPost);
-
         mPrePostGroup = (RelativeLayout) findViewById(R.id.prePostViewGroup);
-        mPrePostTitle = (TextView) findViewById(R.id.prePostTitleTextView);
+        mPrePostTitle = (EditText) findViewById(R.id.prePostTitleTextView);
         mPrePostImage = (ImageView) findViewById(R.id.prePostImageView);
         mPrePostGroup.setVisibility(View.INVISIBLE);
         mPrePostGroup.setEnabled(false);
+
         mOkButton = (Button) findViewById(R.id.okButton);
         mNoButton = (Button) findViewById(R.id.noButton);
 
@@ -167,6 +176,7 @@ public class MainActivity extends AppCompatActivity {
         mPrePostGroup.setEnabled(false);
         mPrePostGroup.setVisibility(View.INVISIBLE);
         mPrePostImage.setImageBitmap(null);
+
         createPost();
 
     }
@@ -183,11 +193,15 @@ public class MainActivity extends AppCompatActivity {
 
         try {
 
-            //Temporary
-            postToSave.setImageTitle(Long.toString(System.currentTimeMillis()));
+            //Creates local Post object then saves to Backendless
+
+            mPostTitle = mPrePostTitle.getText().toString();
+            postToSave.setImageTitle(mPostTitle);
+
             postToSave.setLoc(new GeoPoint(mLastLocation.getLatitude(), mLastLocation.getLongitude()));
-            Log.d(TAG, "Create post: " + mBackendlessFileURL);
+
             postToSave.setImageURI(mBackendlessFileURL);
+
             Backendless.Persistence.save(postToSave, n);
         } catch (Exception e) {
             e.printStackTrace();
@@ -204,10 +218,11 @@ public class MainActivity extends AppCompatActivity {
             Log.d(TAG, "launchCamera1");
             File image = null;
             File fileDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+            String prefix = "";
 
             try {
 
-                String prefix = Long.toString(System.currentTimeMillis());
+                prefix = Long.toString(System.currentTimeMillis());
                 image = File.createTempFile(prefix, ".JPG", fileDir);
                 Log.d(TAG, "launchCamera2");
 
@@ -217,10 +232,10 @@ public class MainActivity extends AppCompatActivity {
             }
 
             if (image != null) {
-                final Uri deviceImageURI = Uri.fromFile(image);
+                final Uri deviceImageURI = FileProvider.getUriForFile(this, this.getApplicationContext().getPackageName() + ".provider",image);
 
-                mNewPostImagePath = image.getPath();
-
+                //temp
+                mNewPostImagePath = image.getAbsolutePath();
                 cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, deviceImageURI);
                 startActivityForResult(cameraIntent, CAPTURE_IMAGE_RESULT);
             }
@@ -228,11 +243,38 @@ public class MainActivity extends AppCompatActivity {
     }protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.d(TAG, requestCode + " " + CAPTURE_IMAGE_RESULT + " | " + resultCode + " " + RESULT_OK);
 
-        Log.d(TAG, mNewPostImagePath);
+
+        String fileName = Environment.getExternalStorageDirectory().getAbsolutePath();
+        Log.d(TAG, "PostImagePath: " + mNewPostImagePath + "\n ExternalStorageDir AbsolutePath: " + Environment.getExternalStorageDirectory().getAbsolutePath()
+            + " \n ExternalStorageDir Path: " + Environment.getExternalStorageDirectory().getPath()
+            + " \n ExternalPublicDir AbsoPath: " + Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
+                + " \n ExternalPublicDir Path: " + Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getPath());
+
+        int rotationInDegrees = 0; //VARIABLE TO REORIENT THE IMAGE
+
         mImage = BitmapFactory.decodeFile(mNewPostImagePath);
+        try {
+            ExifInterface exifInterface = new ExifInterface(mNewPostImagePath);
+            int exifRotation = 0;
+            if (exifInterface != null) {
+                exifRotation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+                Log.i("imageRotatin", "exif not null");
+            }
+            if (exifRotation == ExifInterface.ORIENTATION_ROTATE_90) {
+                rotationInDegrees = 90;
+            } else if (exifRotation == ExifInterface.ORIENTATION_ROTATE_180) {
+                rotationInDegrees = 180;
+            } else if (exifRotation == ExifInterface.ORIENTATION_ROTATE_270) {
+                rotationInDegrees = 270;
+            }
+
+            Log.d(TAG, "THE ORENTTATION IS: " + exifInterface.getAttribute(ExifInterface.TAG_ORIENTATION) + " Normal: " + ExifInterface.ORIENTATION_NORMAL + " 180: " + ExifInterface.ORIENTATION_ROTATE_180);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         Matrix matrix = new Matrix();
-        matrix.postRotate(90);
-        Bitmap compressedImage = Bitmap.createScaledBitmap(mImage, mImage.getWidth() / 4, mImage.getHeight() / 4, false);
+        matrix.postRotate(rotationInDegrees);
+        Bitmap compressedImage = Bitmap.createScaledBitmap(mImage, mImage.getWidth() / 2, mImage.getHeight() / 2, false);
         mImage = Bitmap.createBitmap(compressedImage, 0, 0, compressedImage.getWidth(), compressedImage.getHeight(), matrix, false);
 
 
@@ -272,9 +314,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-
-
     public void getPostArray()
     {
 
@@ -287,6 +326,8 @@ public class MainActivity extends AppCompatActivity {
                     Log.d(TAG, p.getImageTitle() + " | " + p.getImageURI() + " | " + p.getLoc().getLatitudeE6());
                     setMarker(p);
                 }
+
+                Toast.makeText(MainActivity.this, "REFRESHING!", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -375,9 +416,9 @@ public class MainActivity extends AppCompatActivity {
             mUserButton.setOnClickListener(new OnClickListener() {
                 public void onClick(View v) {startActivity(new Intent(MainActivity.this, Splash.class));}});
             mCameraButton.setOnClickListener(new OnClickListener() {
-                public void onClick(View v) {startActivity(new Intent(MainActivity.this, PostActivity.class));}});
+                public void onClick(View v) {launchCameraIntent(null);}});
             mNearbyButton.setOnClickListener(new OnClickListener() {
-                public void onClick(View v) {startActivity(new Intent(MainActivity.this, Splash.class));}});
+                public void onClick(View v) {getPostArray();}});
         }
 
         @Override
@@ -399,7 +440,8 @@ public class MainActivity extends AppCompatActivity {
                 mMiniPost.setVisibility(View.VISIBLE); mMiniPost.bringToFront();
                 Post temp = (Post) marker.getTag();
                 Log.d(TAG, "MY IMAGE IS FROM: " + temp.getImageURI());
-                mPostText.setText(temp.getImageTitle()); mPostImage.setImageBitmap(temp.getImage());
+                mPostText.setText(temp.getImageTitle());
+                mPostImage.setImageBitmap(PostUtil.getImageFromURL(temp.getImageURI()));
             } catch (Exception e) {e.printStackTrace();}
             return false;
         }

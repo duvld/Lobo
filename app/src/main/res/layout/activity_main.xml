@@ -81,17 +81,44 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:layout_toEndOf="@+id/postTextView"/>
+            android:layout_toEndOf="@+id/titleLayout"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            />
 
-        <TextView
-            android:paddingTop="20dp"
+        <RelativeLayout
             android:layout_height="match_parent"
             android:layout_width="240dp"
-            android:text="@string/app_name"
-            android:textColor="#ffffffff"
-            android:id="@+id/postTextView"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true" />
+            android:id="@+id/titleLayout">
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="240dp"
+                android:text="fhsadhfasdhf lsdahfh adlsjkh fhadskflkasd fasdjkhfl adhsjfhl saj"
+                android:textSize="17dp"
+                android:textStyle="bold"
+                android:gravity="left"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:layout_marginLeft="@dimen/activity_vertical_margin"
+                android:textColor="@android:color/white"
+                android:id="@+id/postTextView"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true" />
+
+            <TextView
+                android:layout_width="240dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:text="12/31/1996 12:32AM"
+                android:textSize="12dp"
+                android:textStyle="italic"
+                android:textColor="@android:color/darker_gray"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"/>
+        </RelativeLayout>
+
     </RelativeLayout>
 
     <RelativeLayout
@@ -100,6 +127,7 @@
         android:layout_height="match_parent"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
         android:layout_above="@+id/activity_miniPost"
         android:paddingTop="@dimen/activity_vertical_margin"
         android:paddingBottom="@dimen/activity_vertical_margin"
@@ -107,22 +135,24 @@
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:layout_marginRight="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_marginTop="?attr/actionBarSize"
         android:layout_marginBottom="@dimen/activity_vertical_margin"
         android:orientation="vertical"
         android:background="#007733">
 
-        <TextView
+        <EditText
             android:id="@+id/prePostTitleTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:color/white"
-            android:layout_alignParentTop="true"/>
+            android:layout_alignParentTop="true"
+            android:hint="Name your creation!"
+            android:textAlignment="center"/>
 
         <ImageView
             android:id="@+id/prePostImageView"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_below="@+id/prePostTitleTextView"
             android:layout_centerHorizontal="true"/>
 
@@ -151,6 +181,7 @@
                 android:text="OK"
                 />
         </RelativeLayout>
+
     </RelativeLayout>
 
 </RelativeLayout>
