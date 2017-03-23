@@ -1,13 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<com.sothree.slidinguppanel.SlidingUpPanelLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:sothree="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activity_main"
+    android:gravity="bottom"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    sothree:umanoPanelHeight="100dp"
+    >
+
+<RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:screenOrientation="portrait"
     tools:context="com.example.angietong.lobo.UI.MainActivity">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/my_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"/>
 
+    <!-- Map Fragment -->
     <fragment
         android:name="com.google.android.gms.maps.MapFragment"
         android:layout_width="match_parent"
@@ -16,42 +33,12 @@
         tools:context="com.example.mapwithmarker.MapsMarkerActivity"
         android:id="@+id/map" />
 
-    <Button
-        android:text="Capture"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/createPostButton"
-        android:onClick="launchCameraIntent"/>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="140dp"
-        android:layout_alignParentBottom="true"
-        android:background="#AA000000"
-        android:id="@+id/activity_miniPost">
+    <!-- Bottom Toolbar with icons -->
 
-        <ImageView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_alignParentTop="true"
-            android:layout_toEndOf="@+id/postTextView"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
-            android:id="@+id/postImageView" />
 
-        <TextView
-            android:paddingTop="20dp"
-            android:layout_height="match_parent"
-            android:layout_width="240dp"
-            android:text="TEST ETS TRSTT ESTST EST"
-            android:textAlignment="center"
-            android:textColor="#ffffffff"
-            android:id="@+id/postTextView"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true" />
-    </RelativeLayout>
+    <!-- Image view on click -->
+
 
     <RelativeLayout
         android:id="@+id/prePostViewGroup"
@@ -59,6 +46,7 @@
         android:layout_height="match_parent"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
         android:layout_above="@+id/activity_miniPost"
         android:paddingTop="@dimen/activity_vertical_margin"
         android:paddingBottom="@dimen/activity_vertical_margin"
@@ -66,22 +54,24 @@
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:layout_marginRight="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_marginTop="?attr/actionBarSize"
         android:layout_marginBottom="@dimen/activity_vertical_margin"
         android:orientation="vertical"
         android:background="#007733">
 
-        <TextView
+        <EditText
             android:id="@+id/prePostTitleTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:color/white"
-            android:layout_alignParentTop="true"/>
+            android:layout_alignParentTop="true"
+            android:hint="Name your creation!"
+            android:textAlignment="center"/>
 
         <ImageView
             android:id="@+id/prePostImageView"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_below="@+id/prePostTitleTextView"
             android:layout_centerHorizontal="true"/>
 
@@ -110,6 +100,121 @@
                 android:text="OK"
                 />
         </RelativeLayout>
+
+    </RelativeLayout>
+</RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_alignParentTop="true"
+        android:background="#006622"
+        android:id="@+id/activity_miniPost">
+
+        <ImageView
+            android:id="@+id/postImageView"
+            android:contentDescription="@string/app_name"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_toEndOf="@+id/titleLayout"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            />
+
+        <RelativeLayout
+            android:layout_height="match_parent"
+            android:layout_width="240dp"
+            android:id="@+id/titleLayout">
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="240dp"
+                android:text="fhsadhfasdhf lsdahfh adlsjkh fhadskflkasd fasdjkhfl adhsjfhl saj"
+                android:textSize="17dp"
+                android:textStyle="bold"
+                android:gravity="left"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:layout_marginLeft="@dimen/activity_vertical_margin"
+                android:textColor="@android:color/white"
+                android:id="@+id/postTextView"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true" />
+
+            <TextView
+                android:layout_width="240dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:text="12/31/1996 12:32AM"
+                android:textSize="12dp"
+                android:textStyle="italic"
+                android:textColor="@android:color/darker_gray"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"/>
+        </RelativeLayout>
+
+
+
+
+
     </RelativeLayout>
 
-</RelativeLayout>
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/comments"
+            android:layout_below="@id/activity_miniPost"
+            android:layout_alignParentBottom="true"
+            >
+
+        </ListView>
+
+        <RelativeLayout
+            android:id="@+id/bottomToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_alignParentTop="true"
+            android:weightSum="3"
+            android:background="#006622">
+
+            <ImageView
+                android:id="@+id/userButton"
+                android:src="@drawable/usericon"
+                android:contentDescription="@string/app_name"
+                android:clickable="true"
+                android:layout_width="150dp"
+                android:layout_height="100dp"
+                android:padding="15dp"
+                android:layout_alignParentLeft="true"/>
+
+            <ImageView
+                android:id="@+id/createPostButton"
+                android:src="@drawable/cambutton"
+                android:contentDescription="@string/app_name"
+                android:clickable="true"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_centerHorizontal="true"/>
+
+            <ImageView
+                android:id="@+id/nearbyButton"
+                android:src="@drawable/nearbyicon"
+                android:contentDescription="@string/app_name"
+                android:clickable="true"
+                android:layout_width="150dp"
+                android:layout_height="100dp"
+                android:padding="10dp"
+                android:layout_alignParentEnd="true"/>
+
+        </RelativeLayout>
+    </RelativeLayout>
+
+
+</com.sothree.slidinguppanel.SlidingUpPanelLayout>
