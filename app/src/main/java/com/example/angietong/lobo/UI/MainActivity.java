@@ -178,6 +178,9 @@ public class MainActivity extends AppCompatActivity {
         buildGoogleAPIClient();
         commentsListView();
 
+        //DISABLE SCROLLING
+        main.setEnabled(false);
+
         //TEST setArray and getPostArray HERE
         getPostArray();
     }
@@ -462,6 +465,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public boolean onMarkerClick(Marker marker) {
             try {
+                main.setEnabled(true);
                 mBtmToolbar.setVisibility(View.INVISIBLE);
                 Log.d(TAG, "IM IN MARKER CLICKER LISTENRE");
                 mMiniPost.setVisibility(View.VISIBLE);
@@ -477,6 +481,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onMapClick(LatLng latLng) {
+            main.setEnabled(false);
             mMiniPost.setVisibility(View.INVISIBLE);
             mBtmToolbar.setVisibility(View.VISIBLE);
             main.setPanelHeight(mBtmToolbar.getHeight());
