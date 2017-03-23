@@ -20,6 +20,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
@@ -112,6 +113,8 @@ public class MainActivity extends AppCompatActivity {
     //TODO: Don't use global variables
     private String mBackendlessURL;
 
+    private boolean enabler = true;
+
     //Full Image
     private ImageView mFullImage;
 
@@ -179,15 +182,19 @@ public class MainActivity extends AppCompatActivity {
         mMiniPost.setVisibility(View.INVISIBLE);
         mBtmToolbar.setVisibility(View.VISIBLE);
 
+
         buildGoogleAPIClient();
         commentsListView();
 
         //DISABLE SCROLLING
-        main.setEnabled(false);
+
+        main.setEnabled(!enabler);
 
         //TEST setArray and getPostArray HERE
         getPostArray();
     }
+
+
 
     //ON CLICK FOR CAPTURE BUTTONS
     public void okButtonFunction(View view)
@@ -207,7 +214,6 @@ public class MainActivity extends AppCompatActivity {
         mPrePostGroup.setVisibility(View.INVISIBLE);
         mPrePostImage.setImageBitmap(null);
     }
-
     public void createPost() {
         Post postToSave = new Post();
 
@@ -419,6 +425,9 @@ public class MainActivity extends AppCompatActivity {
         buildGoogleAPIClient();
     }
 
+    //THIS IS A USELESS ON CLICK LISTENER FOR THE FULL IMAGE TO FIX onMapClick listener issue
+    public void doesNothing(View view){}
+
     class Callbacks implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
             OnMapReadyCallback, AsyncCallback<Post>, GoogleMap.OnMarkerClickListener, GoogleMap.OnMapClickListener
     {
@@ -469,7 +478,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public boolean onMarkerClick(Marker marker) {
             try {
-                main.setEnabled(true);
+                main.setEnabled(enabler);
                 mBtmToolbar.setVisibility(View.INVISIBLE);
                 Log.d(TAG, "IM IN MARKER CLICKER LISTENRE");
                 mMiniPost.setVisibility(View.VISIBLE);
@@ -488,7 +497,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onMapClick(LatLng latLng) {
-            main.setEnabled(false);
+            main.setEnabled(!enabler);
             mMiniPost.setVisibility(View.INVISIBLE);
             mBtmToolbar.setVisibility(View.VISIBLE);
             main.setPanelHeight(mBtmToolbar.getHeight());

@@ -171,6 +171,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="300dp"
                 android:id="@+id/fullImageView"
+                android:onClick="doesNothing"
                 android:layout_alignParentTop="true"/>
 
             <ListView
