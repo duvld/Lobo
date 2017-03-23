@@ -161,6 +161,26 @@
         </RelativeLayout>
 
     </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/activity_miniPost"
+            android:id="@+id/underMiniPost">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="300dp"
+                android:id="@+id/fullImageView"
+                android:layout_alignParentTop="true"/>
+
+            <ListView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/comments"
+                android:layout_below="@id/fullImageView">
+            </ListView>
+        </RelativeLayout>
+
         <RelativeLayout
             android:id="@+id/bottomToolbar"
             android:layout_width="match_parent"
