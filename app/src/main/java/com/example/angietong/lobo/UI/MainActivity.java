@@ -112,6 +112,9 @@ public class MainActivity extends AppCompatActivity {
     //TODO: Don't use global variables
     private String mBackendlessURL;
 
+    //Full Image
+    private ImageView mFullImage;
+
     private String mNewPostImagePath;
     private String mPostTitle;
     private String mBackendlessFileURL;
@@ -166,6 +169,7 @@ public class MainActivity extends AppCompatActivity {
         mOkButton = (Button) findViewById(R.id.okButton);
         mNoButton = (Button) findViewById(R.id.noButton);
 
+        mFullImage = (ImageView) findViewById(R.id.fullImageView);
 
         main = (SlidingUpPanelLayout) findViewById(R.id.activity_main);
         main.setDragView(mMiniPost);
@@ -474,7 +478,10 @@ public class MainActivity extends AppCompatActivity {
                 Post temp = (Post) marker.getTag();
                 Log.d(TAG, "MY IMAGE IS FROM: " + temp.getImageURI());
                 mPostText.setText(temp.getImageTitle());
-                mPostImage.setImageBitmap(PostUtil.getImageFromURL(temp.getImageURI()));
+                Bitmap b = PostUtil.getImageFromURL(temp.getImageURI());
+                mPostImage.setImageBitmap(b);
+                mFullImage.setImageBitmap(b);
+
             } catch (Exception e) {e.printStackTrace();}
             return false;
         }
