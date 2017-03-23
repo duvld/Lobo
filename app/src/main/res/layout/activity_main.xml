@@ -160,7 +160,22 @@
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"/>
         </RelativeLayout>
 
+
+
+
+
     </RelativeLayout>
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/comments"
+            android:layout_below="@id/activity_miniPost"
+            android:layout_alignParentBottom="true"
+            >
+
+        </ListView>
+
         <RelativeLayout
             android:id="@+id/bottomToolbar"
             android:layout_width="match_parent"
