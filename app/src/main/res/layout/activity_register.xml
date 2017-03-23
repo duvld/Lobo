@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+android:id="@+id/activity_register"
+android:orientation="vertical"
+android:layout_height="match_parent"
+android:layout_width="match_parent"
+android:background="@color/colorPrimary"
+tools:context="com.example.angietong.lobo.R_L.RegisterActivity">
+
+<Space
+    android:layout_width="match_parent"
+    android:layout_height="50dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:textSize="45sp"
+        android:text="Create Your Account"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        />
+
+    <Space
+    android:layout_width="match_parent"
+    android:layout_height="50dp" />
+
+<EditText
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:textColorHint="@color/colorAccent"
+    android:layout_marginLeft="32dp"
+    android:layout_marginRight="32dp"
+    android:background="@drawable/edittext_login_form"
+    android:id="@+id/registerActivityUsername"
+    android:hint="Username" />
+    android:singleLine="true" />
+
+<EditText
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:textColorHint="@color/colorAccent"
+    android:layout_marginLeft="32dp"
+    android:layout_marginRight="32dp"
+    android:layout_marginTop="8dp"
+    android:background="@drawable/edittext_login_form"
+    android:inputType="textEmailAddress"
+    android:hint="E-mail Address"
+    android:id="@+id/registerActivityEmailAddress"
+  />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColorHint="@color/colorAccent"
+        android:layout_marginLeft="32dp"
+        android:layout_marginRight="32dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/edittext_login_form"
+        android:inputType="textPassword"
+        android:hint="Password"
+        android:id="@+id/registerActivityPassword"
+        android:singleLine="true" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColorHint="@color/colorAccent"
+        android:layout_marginLeft="32dp"
+        android:layout_marginRight="32dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/edittext_login_form"
+        android:inputType="textPassword"
+        android:hint="Confirm Password"
+        android:id="@+id/registerActivityPasswordConfirm"
+        android:singleLine="true" />
+
+    <CheckBox
+        android:text="To register, please tick to agree to our Terms and Conditions"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginRight="32dp"
+        android:paddingLeft="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/registerActivityCheckBox"
+        android:textColor="@color/white"
+        android:checked="false" />
+
+    <Button
+    android:layout_width="wrap_content"
+    android:layout_height="40dp"
+    android:layout_gravity="center_horizontal"
+    android:layout_marginLeft="32dp"
+    android:layout_marginTop="16dp"
+    android:layout_marginRight="32dp"
+    android:background="@drawable/button_login_form"
+    android:textColor="@color/white"
+    android:text="Register"
+    android:id="@+id/registerButton"
+    android:onClick="Register"/>
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="15dp"
+        android:gravity="center_horizontal"
+        android:text="Already have an account?"
+        android:textColor="@android:color/darker_gray" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@android:color/darker_gray"
+        android:layout_marginTop="2dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:textColor="@color/white"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="2dp"
+        android:text="Sign In"
+        android:clickable="true"
+        android:onClick="toLoginActivity"/>
+
+</LinearLayout>
