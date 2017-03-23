@@ -33,6 +33,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.angietong.lobo.Model.PostUtil;
+import com.example.angietong.lobo.R_L.LoginActivity;
+import com.example.angietong.lobo.R_L.RegisterActivity;
 import com.google.android.gms.location.LocationServices;
 
 import com.backendless.Backendless;
@@ -78,6 +80,17 @@ public class MainActivity extends AppCompatActivity {
     private static final String BACKENDLESS_SECRET_KEY = "DE82CF74-A7CF-9241-FF82-04CD84301800";
     private static final String TAG = "mainAct";
     private static final int CAPTURE_IMAGE_RESULT = 001;
+    public static boolean loginT; //Lets u know, you're logged in
+
+    public void toRegisterActivity(View view){
+        Intent i = new Intent(this, RegisterActivity.class);
+        startActivity(i);
+    }
+
+    public void toLoginActivity(View view) {
+        Intent i = new Intent(this, LoginActivity.class);
+        startActivity(i);
+    }
 
     SlidingUpPanelLayout main = null;
 
@@ -139,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         String appVersion = "v1";
         Backendless.initApp(this, BACKENDLESS_APP_ID, BACKENDLESS_SECRET_KEY, appVersion);
-
+        Log.d(TAG, "LoginVariable = " + loginT); //Printf checking if logged in
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
 
@@ -441,7 +454,7 @@ public class MainActivity extends AppCompatActivity {
 
             // Bottom Toolbar Button Listeners
             mUserButton.setOnClickListener(new OnClickListener() {
-                public void onClick(View v) {startActivity(new Intent(MainActivity.this, Splash.class));}});
+                public void onClick(View v) {startActivity(new Intent(MainActivity.this, LoginActivity.class));}});
             mCameraButton.setOnClickListener(new OnClickListener() {
                 public void onClick(View v) {launchCameraIntent(null);}});
             mNearbyButton.setOnClickListener(new OnClickListener() {
