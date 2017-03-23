@@ -3,35 +3,18 @@
     android:id="@+id/activity_splash"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#006622">
+    android:background="#9BC2CF">
 
-    <!-- Display icon -->
+    <!-- Display icon android:background="#9BC2CF" -->
     <ImageView
         android:id="@+id/splashicon"
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:src="@drawable/icon"/>
-=======
-        android:src="@drawable/icon"
+        android:src="@drawable/loboicon"
         android:contentDescription=""
         android:layout_width="120dp"
         android:layout_height="120dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="179dp" />
->>>>>>> Stashed changes
-=======
-        android:src="@drawable/icon"
-        android:contentDescription=""
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"/>
-
->>>>>>> 26708a66e095bbb0c8f430d98d34911bbdba27ea
 
 </RelativeLayout>

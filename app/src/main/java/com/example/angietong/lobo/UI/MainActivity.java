@@ -29,12 +29,9 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-<<<<<<< HEAD
-=======
 
 import com.example.angietong.lobo.Model.PostUtil;
 import com.google.android.gms.location.LocationServices;
->>>>>>> 26708a66e095bbb0c8f430d98d34911bbdba27ea
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessCollection;
@@ -418,10 +415,7 @@ public class MainActivity extends AppCompatActivity {
             googleMap.setMapStyle(style);
             mMap = googleMap;
             mMap.setOnMapClickListener(n);
-<<<<<<< HEAD
-=======
             mMap.setOnMarkerClickListener(n);
->>>>>>> 26708a66e095bbb0c8f430d98d34911bbdba27ea
 
             // Bottom Toolbar Button Listeners
             mUserButton.setOnClickListener(new OnClickListener() {
