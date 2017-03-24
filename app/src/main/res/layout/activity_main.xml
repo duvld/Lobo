@@ -22,7 +22,8 @@
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
         android:elevation="4dp"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"/>
+        android:theme="@style/ThemeOv
+        erlay.AppCompat.ActionBar"/>
 
     <!-- Map Fragment -->
     <fragment
@@ -43,19 +44,15 @@
     <RelativeLayout
         android:id="@+id/prePostViewGroup"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:layout_above="@+id/activity_miniPost"
         android:paddingTop="@dimen/activity_vertical_margin"
         android:paddingBottom="@dimen/activity_vertical_margin"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginRight="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="?attr/actionBarSize"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:layout_below="@+id/toolbar"
         android:orientation="vertical"
         android:background="#007733">
 
@@ -63,10 +60,13 @@
             android:id="@+id/prePostTitleTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:textSize="20sp"
             android:background="@android:color/white"
             android:layout_alignParentTop="true"
             android:hint="Name your creation!"
-            android:textAlignment="center"/>
+            android:textAlignment="center"
+            />
 
         <ImageView
             android:id="@+id/prePostImageView"

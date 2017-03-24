@@ -115,6 +115,12 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean enabler = true;
 
+    //title creator
+    private EditText mTitleCreator;
+
+    //toolvar
+    private Toolbar myToolbar;
+
     //Full Image
     private ImageView mFullImage;
 
@@ -128,7 +134,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     // Create Map Style
-    String styleString = "[{\"featureType\":\"water\",\"elementType\":\"geometry\",\"stylers\":[{\"hue\":\"#165c64\"},{\"saturation\":34},{\"lightness\":-69},{\"visibility\":\"on\"}]},{\"featureType\":\"landscape\",\"elementType\":\"geometry\",\"stylers\":[{\"hue\":\"#b7caaa\"},{\"saturation\":-14},{\"lightness\":-18},{\"visibility\":\"on\"}]},{\"featureType\":\"landscape.man_made\",\"elementType\":\"all\",\"stylers\":[{\"hue\":\"#cbdac1\"},{\"saturation\":-6},{\"lightness\":-9},{\"visibility\":\"on\"}]},{\"featureType\":\"road\",\"elementType\":\"geometry\",\"stylers\":[{\"hue\":\"#8d9b83\"},{\"saturation\":-89},{\"lightness\":-12},{\"visibility\":\"on\"}]},{\"featureType\":\"road.highway\",\"elementType\":\"geometry\",\"stylers\":[{\"hue\":\"#d4dad0\"},{\"saturation\":-88},{\"lightness\":54},{\"visibility\":\"simplified\"}]},{\"featureType\":\"road.arterial\",\"elementType\":\"geometry\",\"stylers\":[{\"hue\":\"#bdc5b6\"},{\"saturation\":-89},{\"lightness\":-3},{\"visibility\":\"simplified\"}]},{\"featureType\":\"road.local\",\"elementType\":\"geometry\",\"stylers\":[{\"hue\":\"#bdc5b6\"},{\"saturation\":-89},{\"lightness\":-26},{\"visibility\":\"on\"}]},{\"featureType\":\"poi\",\"elementType\":\"geometry\",\"stylers\":[{\"hue\":\"#c17118\"},{\"saturation\":61},{\"lightness\":-45},{\"visibility\":\"on\"}]},{\"featureType\":\"poi.park\",\"elementType\":\"all\",\"stylers\":[{\"hue\":\"#8ba975\"},{\"saturation\":-46},{\"lightness\":-28},{\"visibility\":\"on\"}]},{\"featureType\":\"transit\",\"elementType\":\"geometry\",\"stylers\":[{\"hue\":\"#a43218\"},{\"saturation\":74},{\"lightness\":-51},{\"visibility\":\"simplified\"}]},{\"featureType\":\"administrative.province\",\"elementType\":\"all\",\"stylers\":[{\"hue\":\"#ffffff\"},{\"saturation\":0},{\"lightness\":100},{\"visibility\":\"simplified\"}]},{\"featureType\":\"administrative.neighborhood\",\"elementType\":\"all\",\"stylers\":[{\"hue\":\"#ffffff\"},{\"saturation\":0},{\"lightness\":100},{\"visibility\":\"off\"}]},{\"featureType\":\"administrative.locality\",\"elementType\":\"labels\",\"stylers\":[{\"hue\":\"#ffffff\"},{\"saturation\":0},{\"lightness\":100},{\"visibility\":\"off\"}]},{\"featureType\":\"administrative.land_parcel\",\"elementType\":\"all\",\"stylers\":[{\"hue\":\"#ffffff\"},{\"saturation\":0},{\"lightness\":100},{\"visibility\":\"off\"}]},{\"featureType\":\"administrative\",\"elementType\":\"all\",\"stylers\":[{\"hue\":\"#3a3935\"},{\"saturation\":5},{\"lightness\":-57},{\"visibility\":\"off\"}]},{\"featureType\":\"poi.medical\",\"elementType\":\"geometry\",\"stylers\":[{\"hue\":\"#cba923\"},{\"saturation\":50},{\"lightness\":-46},{\"visibility\":\"on\"}]}]";
+    String styleString = "[ { \"featureType\": \"administrative\", \"elementType\": \"labels.text.fill\", \"stylers\": [ { \"color\": \"#444444\" } ] }, { \"featureType\": \"landscape\", \"elementType\": \"all\", \"stylers\": [ { \"color\": \"#f2f2f2\" } ] }, { \"featureType\": \"poi\", \"elementType\": \"all\", \"stylers\": [ { \"visibility\": \"on\" } ] }, { \"featureType\": \"poi\", \"elementType\": \"labels.icon\", \"stylers\": [ { \"visibility\": \"off\" } ] }, { \"featureType\": \"road\", \"elementType\": \"all\", \"stylers\": [ { \"saturation\": -100 }, { \"lightness\": 45 } ] }, { \"featureType\": \"road.highway\", \"elementType\": \"all\", \"stylers\": [ { \"visibility\": \"simplified\" } ] }, { \"featureType\": \"road.arterial\", \"elementType\": \"labels.icon\", \"stylers\": [ { \"visibility\": \"off\" } ] }, { \"featureType\": \"transit\", \"elementType\": \"all\", \"stylers\": [ { \"visibility\": \"off\" } ] }, { \"featureType\": \"water\", \"elementType\": \"all\", \"stylers\": [ { \"color\": \"#b4e7fb\" }, { \"visibility\": \"on\" } ] }, { \"featureType\": \"water\", \"elementType\": \"geometry.fill\", \"stylers\": [ { \"color\": \"#add9ec\" } ] } ]";
+   // String styleString = "[{\"featureType\":\"water\",\"elementType\":\"geometry\",\"stylers\":[{\"hue\":\"#165c64\"},{\"saturation\":34},{\"lightness\":-69},{\"visibility\":\"on\"}]},{\"featureType\":\"landscape\",\"elementType\":\"geometry\",\"stylers\":[{\"hue\":\"#b7caaa\"},{\"saturation\":-14},{\"lightness\":-18},{\"visibility\":\"on\"}]},{\"featureType\":\"landscape.man_made\",\"elementType\":\"all\",\"stylers\":[{\"hue\":\"#cbdac1\"},{\"saturation\":-6},{\"lightness\":-9},{\"visibility\":\"on\"}]},{\"featureType\":\"road\",\"elementType\":\"geometry\",\"stylers\":[{\"hue\":\"#8d9b83\"},{\"saturation\":-89},{\"lightness\":-12},{\"visibility\":\"on\"}]},{\"featureType\":\"road.highway\",\"elementType\":\"geometry\",\"stylers\":[{\"hue\":\"#d4dad0\"},{\"saturation\":-88},{\"lightness\":54},{\"visibility\":\"simplified\"}]},{\"featureType\":\"road.arterial\",\"elementType\":\"geometry\",\"stylers\":[{\"hue\":\"#bdc5b6\"},{\"saturation\":-89},{\"lightness\":-3},{\"visibility\":\"simplified\"}]},{\"featureType\":\"road.local\",\"elementType\":\"geometry\",\"stylers\":[{\"hue\":\"#bdc5b6\"},{\"saturation\":-89},{\"lightness\":-26},{\"visibility\":\"on\"}]},{\"featureType\":\"poi\",\"elementType\":\"geometry\",\"stylers\":[{\"hue\":\"#c17118\"},{\"saturation\":61},{\"lightness\":-45},{\"visibility\":\"on\"}]},{\"featureType\":\"poi.park\",\"elementType\":\"all\",\"stylers\":[{\"hue\":\"#8ba975\"},{\"saturation\":-46},{\"lightness\":-28},{\"visibility\":\"on\"}]},{\"featureType\":\"transit\",\"elementType\":\"geometry\",\"stylers\":[{\"hue\":\"#a43218\"},{\"saturation\":74},{\"lightness\":-51},{\"visibility\":\"simplified\"}]},{\"featureType\":\"administrative.province\",\"elementType\":\"all\",\"stylers\":[{\"hue\":\"#ffffff\"},{\"saturation\":0},{\"lightness\":100},{\"visibility\":\"simplified\"}]},{\"featureType\":\"administrative.neighborhood\",\"elementType\":\"all\",\"stylers\":[{\"hue\":\"#ffffff\"},{\"saturation\":0},{\"lightness\":100},{\"visibility\":\"off\"}]},{\"featureType\":\"administrative.locality\",\"elementType\":\"labels\",\"stylers\":[{\"hue\":\"#ffffff\"},{\"saturation\":0},{\"lightness\":100},{\"visibility\":\"off\"}]},{\"featureType\":\"administrative.land_parcel\",\"elementType\":\"all\",\"stylers\":[{\"hue\":\"#ffffff\"},{\"saturation\":0},{\"lightness\":100},{\"visibility\":\"off\"}]},{\"featureType\":\"administrative\",\"elementType\":\"all\",\"stylers\":[{\"hue\":\"#3a3935\"},{\"saturation\":5},{\"lightness\":-57},{\"visibility\":\"off\"}]},{\"featureType\":\"poi.medical\",\"elementType\":\"geometry\",\"stylers\":[{\"hue\":\"#cba923\"},{\"saturation\":50},{\"lightness\":-46},{\"visibility\":\"on\"}]}]";
     public MapStyleOptions style = new MapStyleOptions(styleString);
 
     // API Client
@@ -146,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
         String appVersion = "v1";
         Backendless.initApp(this, BACKENDLESS_APP_ID, BACKENDLESS_SECRET_KEY, appVersion);
 
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
 
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
@@ -203,8 +210,11 @@ public class MainActivity extends AppCompatActivity {
         mPrePostGroup.setEnabled(false);
         mPrePostGroup.setVisibility(View.INVISIBLE);
         mPrePostImage.setImageBitmap(null);
-
+        myToolbar.setVisibility(View.VISIBLE);
         createPost();
+        mPrePostTitle.setText("");
+
+
 
     }
     public void noButtonFunction(View view)
@@ -212,6 +222,9 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "NOButton");
         mPrePostGroup.setEnabled(false);
         mPrePostGroup.setVisibility(View.INVISIBLE);
+        myToolbar.setVisibility(View.VISIBLE);
+        mPrePostTitle.setText("");
+
         mPrePostImage.setImageBitmap(null);
     }
     public void createPost() {
@@ -269,71 +282,77 @@ public class MainActivity extends AppCompatActivity {
     }protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.d(TAG, requestCode + " " + CAPTURE_IMAGE_RESULT + " | " + resultCode + " " + RESULT_OK);
 
+        if (requestCode == CAPTURE_IMAGE_RESULT) {
+            if (resultCode == RESULT_OK) {
 
-        String fileName = Environment.getExternalStorageDirectory().getAbsolutePath();
-        Log.d(TAG, "PostImagePath: " + mNewPostImagePath + "\n ExternalStorageDir AbsolutePath: " + Environment.getExternalStorageDirectory().getAbsolutePath()
-            + " \n ExternalStorageDir Path: " + Environment.getExternalStorageDirectory().getPath()
-            + " \n ExternalPublicDir AbsoPath: " + Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
-                + " \n ExternalPublicDir Path: " + Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getPath());
+                String fileName = Environment.getExternalStorageDirectory().getAbsolutePath();
+                Log.d(TAG, "PostImagePath: " + mNewPostImagePath + "\n ExternalStorageDir AbsolutePath: " + Environment.getExternalStorageDirectory().getAbsolutePath()
+                        + " \n ExternalStorageDir Path: " + Environment.getExternalStorageDirectory().getPath()
+                        + " \n ExternalPublicDir AbsoPath: " + Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
+                        + " \n ExternalPublicDir Path: " + Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getPath());
 
-        int rotationInDegrees = 0; //VARIABLE TO REORIENT THE IMAGE
+                int rotationInDegrees = 0; //VARIABLE TO REORIENT THE IMAGE
 
-        mImage = BitmapFactory.decodeFile(mNewPostImagePath);
-        try {
-            ExifInterface exifInterface = new ExifInterface(mNewPostImagePath);
-            int exifRotation = 0;
-            if (exifInterface != null) {
-                exifRotation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
-                Log.i("imageRotatin", "exif not null");
-            }
-            if (exifRotation == ExifInterface.ORIENTATION_ROTATE_90) {
-                rotationInDegrees = 90;
-            } else if (exifRotation == ExifInterface.ORIENTATION_ROTATE_180) {
-                rotationInDegrees = 180;
-            } else if (exifRotation == ExifInterface.ORIENTATION_ROTATE_270) {
-                rotationInDegrees = 270;
-            }
+                mImage = BitmapFactory.decodeFile(mNewPostImagePath);
+                try {
+                    ExifInterface exifInterface = new ExifInterface(mNewPostImagePath);
+                    int exifRotation = 0;
+                    if (exifInterface != null) {
+                        exifRotation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+                        Log.i("imageRotatin", "exif not null");
+                    }
+                    if (exifRotation == ExifInterface.ORIENTATION_ROTATE_90) {
+                        rotationInDegrees = 90;
+                    } else if (exifRotation == ExifInterface.ORIENTATION_ROTATE_180) {
+                        rotationInDegrees = 180;
+                    } else if (exifRotation == ExifInterface.ORIENTATION_ROTATE_270) {
+                        rotationInDegrees = 270;
+                    }
 
-            Log.d(TAG, "THE ORENTTATION IS: " + exifInterface.getAttribute(ExifInterface.TAG_ORIENTATION) + " Normal: " + ExifInterface.ORIENTATION_NORMAL + " 180: " + ExifInterface.ORIENTATION_ROTATE_180);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Matrix matrix = new Matrix();
-        matrix.postRotate(rotationInDegrees);
-        Bitmap compressedImage = Bitmap.createScaledBitmap(mImage, mImage.getWidth() / 2, mImage.getHeight() / 2, false);
-        mImage = Bitmap.createBitmap(compressedImage, 0, 0, compressedImage.getWidth(), compressedImage.getHeight(), matrix, false);
+                    Log.d(TAG, "THE ORENTTATION IS: " + exifInterface.getAttribute(ExifInterface.TAG_ORIENTATION) + " Normal: " + ExifInterface.ORIENTATION_NORMAL + " 180: " + ExifInterface.ORIENTATION_ROTATE_180);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                Matrix matrix = new Matrix();
+                matrix.postRotate(rotationInDegrees);
+                Bitmap compressedImage = Bitmap.createScaledBitmap(mImage, mImage.getWidth() / 2, mImage.getHeight() / 2, false);
+                mImage = Bitmap.createBitmap(compressedImage, 0, 0, compressedImage.getWidth(), compressedImage.getHeight(), matrix, false);
 
 
-        try {
-            AsyncCallback responder = new AsyncCallback() {
-                @Override
-                public void handleResponse(Object o) {
-                    BackendlessFile bf = (BackendlessFile) o;
-                    mBackendlessFileURL = bf.getFileURL();
-                    Log.d(TAG, "It saved | " + mBackendlessFileURL);
+                try {
+                    AsyncCallback responder = new AsyncCallback() {
+                        @Override
+                        public void handleResponse(Object o) {
+                            BackendlessFile bf = (BackendlessFile) o;
+                            mBackendlessFileURL = bf.getFileURL();
+                            Log.d(TAG, "It saved | " + mBackendlessFileURL);
+                            setPrePost();
+                        }
+
+                        @Override
+                        public void handleFault(BackendlessFault backendlessFault) {
+                            Log.d(TAG, "it didnt save" + backendlessFault.toString());
+                        }
+
+                    };
                     setPrePost();
+
+                    Backendless.Files.Android.upload(mImage, Bitmap.CompressFormat.JPEG, 50, Long.toString(System.currentTimeMillis()), "media", responder);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
 
-                @Override
-                public void handleFault(BackendlessFault backendlessFault) {
-                    Log.d(TAG, "it didnt save" + backendlessFault.toString());
-                }
-
-            };
-            setPrePost();
-
-            Backendless.Files.Android.upload(mImage, Bitmap.CompressFormat.JPEG, 50, Long.toString(System.currentTimeMillis()), "media", responder);
-        } catch (Exception e) {
-            e.printStackTrace();
+                //temp - reduce image quality
+                //Backendless.Files.Android.upload(mImage, Bitmap.CompressFormat.JPEG, 50, Long.toString(System.currentTimeMillis()), "media", responder);
+            }
         }
-
-        //temp - reduce image quality
-        //Backendless.Files.Android.upload(mImage, Bitmap.CompressFormat.JPEG, 50, Long.toString(System.currentTimeMillis()), "media", responder);
     }
 
     private void setPrePost() {
         mPrePostGroup.setEnabled(true);
         mPrePostGroup.setVisibility(View.VISIBLE);
+
+        myToolbar.setVisibility(View.INVISIBLE);
 
         mPrePostImage.setImageBitmap(mImage);
         mPrePostGroup.bringToFront();
@@ -406,7 +425,7 @@ public class MainActivity extends AppCompatActivity {
     public void setMarker(Post p)
     {
         mMap.addMarker(new MarkerOptions()
-                .title(p.getImageTitle())
+                .title("V")
                 .position(new LatLng(p.getLoc().getLatitude(), p.getLoc().getLongitude())))
                 .setTag(p);
     }
@@ -478,6 +497,8 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public boolean onMarkerClick(Marker marker) {
             try {
+
+
                 main.setEnabled(enabler);
                 mBtmToolbar.setVisibility(View.INVISIBLE);
                 Log.d(TAG, "IM IN MARKER CLICKER LISTENRE");
