@@ -34,6 +34,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.angietong.lobo.Model.PostUtil;
+import com.example.angietong.lobo.R_L.LoginActivity;
+import com.example.angietong.lobo.R_L.RegisterActivity;
 import com.google.android.gms.location.LocationServices;
 
 import com.backendless.Backendless;
@@ -79,6 +81,17 @@ public class MainActivity extends AppCompatActivity {
     private static final String BACKENDLESS_SECRET_KEY = "DE82CF74-A7CF-9241-FF82-04CD84301800";
     private static final String TAG = "mainAct";
     private static final int CAPTURE_IMAGE_RESULT = 001;
+    public static boolean loginT; //Lets u know, you're logged in
+
+    public void toRegisterActivity(View view){
+        Intent i = new Intent(this, RegisterActivity.class);
+        startActivity(i);
+    }
+
+    public void toLoginActivity(View view) {
+        Intent i = new Intent(this, LoginActivity.class);
+        startActivity(i);
+    }
 
     SlidingUpPanelLayout main = null;
 
@@ -134,8 +147,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     // Create Map Style
-    String styleString = "[ { \"featureType\": \"administrative\", \"elementType\": \"labels.text.fill\", \"stylers\": [ { \"color\": \"#444444\" } ] }, { \"featureType\": \"landscape\", \"elementType\": \"all\", \"stylers\": [ { \"color\": \"#f2f2f2\" } ] }, { \"featureType\": \"poi\", \"elementType\": \"all\", \"stylers\": [ { \"visibility\": \"on\" } ] }, { \"featureType\": \"poi\", \"elementType\": \"labels.icon\", \"stylers\": [ { \"visibility\": \"off\" } ] }, { \"featureType\": \"road\", \"elementType\": \"all\", \"stylers\": [ { \"saturation\": -100 }, { \"lightness\": 45 } ] }, { \"featureType\": \"road.highway\", \"elementType\": \"all\", \"stylers\": [ { \"visibility\": \"simplified\" } ] }, { \"featureType\": \"road.arterial\", \"elementType\": \"labels.icon\", \"stylers\": [ { \"visibility\": \"off\" } ] }, { \"featureType\": \"transit\", \"elementType\": \"all\", \"stylers\": [ { \"visibility\": \"off\" } ] }, { \"featureType\": \"water\", \"elementType\": \"all\", \"stylers\": [ { \"color\": \"#b4e7fb\" }, { \"visibility\": \"on\" } ] }, { \"featureType\": \"water\", \"elementType\": \"geometry.fill\", \"stylers\": [ { \"color\": \"#add9ec\" } ] } ]";
-   // String styleString = "[{\"featureType\":\"water\",\"elementType\":\"geometry\",\"stylers\":[{\"hue\":\"#165c64\"},{\"saturation\":34},{\"lightness\":-69},{\"visibility\":\"on\"}]},{\"featureType\":\"landscape\",\"elementType\":\"geometry\",\"stylers\":[{\"hue\":\"#b7caaa\"},{\"saturation\":-14},{\"lightness\":-18},{\"visibility\":\"on\"}]},{\"featureType\":\"landscape.man_made\",\"elementType\":\"all\",\"stylers\":[{\"hue\":\"#cbdac1\"},{\"saturation\":-6},{\"lightness\":-9},{\"visibility\":\"on\"}]},{\"featureType\":\"road\",\"elementType\":\"geometry\",\"stylers\":[{\"hue\":\"#8d9b83\"},{\"saturation\":-89},{\"lightness\":-12},{\"visibility\":\"on\"}]},{\"featureType\":\"road.highway\",\"elementType\":\"geometry\",\"stylers\":[{\"hue\":\"#d4dad0\"},{\"saturation\":-88},{\"lightness\":54},{\"visibility\":\"simplified\"}]},{\"featureType\":\"road.arterial\",\"elementType\":\"geometry\",\"stylers\":[{\"hue\":\"#bdc5b6\"},{\"saturation\":-89},{\"lightness\":-3},{\"visibility\":\"simplified\"}]},{\"featureType\":\"road.local\",\"elementType\":\"geometry\",\"stylers\":[{\"hue\":\"#bdc5b6\"},{\"saturation\":-89},{\"lightness\":-26},{\"visibility\":\"on\"}]},{\"featureType\":\"poi\",\"elementType\":\"geometry\",\"stylers\":[{\"hue\":\"#c17118\"},{\"saturation\":61},{\"lightness\":-45},{\"visibility\":\"on\"}]},{\"featureType\":\"poi.park\",\"elementType\":\"all\",\"stylers\":[{\"hue\":\"#8ba975\"},{\"saturation\":-46},{\"lightness\":-28},{\"visibility\":\"on\"}]},{\"featureType\":\"transit\",\"elementType\":\"geometry\",\"stylers\":[{\"hue\":\"#a43218\"},{\"saturation\":74},{\"lightness\":-51},{\"visibility\":\"simplified\"}]},{\"featureType\":\"administrative.province\",\"elementType\":\"all\",\"stylers\":[{\"hue\":\"#ffffff\"},{\"saturation\":0},{\"lightness\":100},{\"visibility\":\"simplified\"}]},{\"featureType\":\"administrative.neighborhood\",\"elementType\":\"all\",\"stylers\":[{\"hue\":\"#ffffff\"},{\"saturation\":0},{\"lightness\":100},{\"visibility\":\"off\"}]},{\"featureType\":\"administrative.locality\",\"elementType\":\"labels\",\"stylers\":[{\"hue\":\"#ffffff\"},{\"saturation\":0},{\"lightness\":100},{\"visibility\":\"off\"}]},{\"featureType\":\"administrative.land_parcel\",\"elementType\":\"all\",\"stylers\":[{\"hue\":\"#ffffff\"},{\"saturation\":0},{\"lightness\":100},{\"visibility\":\"off\"}]},{\"featureType\":\"administrative\",\"elementType\":\"all\",\"stylers\":[{\"hue\":\"#3a3935\"},{\"saturation\":5},{\"lightness\":-57},{\"visibility\":\"off\"}]},{\"featureType\":\"poi.medical\",\"elementType\":\"geometry\",\"stylers\":[{\"hue\":\"#cba923\"},{\"saturation\":50},{\"lightness\":-46},{\"visibility\":\"on\"}]}]";
+    String styleString = "[ { \"featureType\": \"administrative\", \"elementType\": \"labels.text.fill\", \"stylers\": [ { \"color\": \"#444444\" } ] }, { \"featureType\": \"landscape\", \"elementType\": \"all\", \"stylers\": [ { \"color\": \"#f2f2f2\" } ] }, { \"featureType\": \"poi\", \"elementType\": \"all\", \"stylers\": [ { \"visibility\": \"off\" } ] }, { \"featureType\": \"road\", \"elementType\": \"all\", \"stylers\": [ { \"saturation\": -100 }, { \"lightness\": 45 } ] }, { \"featureType\": \"road.highway\", \"elementType\": \"all\", \"stylers\": [ { \"visibility\": \"simplified\" } ] }, { \"featureType\": \"road.arterial\", \"elementType\": \"labels.icon\", \"stylers\": [ { \"visibility\": \"off\" } ] }, { \"featureType\": \"transit\", \"elementType\": \"all\", \"stylers\": [ { \"visibility\": \"off\" } ] }, { \"featureType\": \"water\", \"elementType\": \"all\", \"stylers\": [ { \"color\": \"#cae0e9\" }, { \"visibility\": \"on\" } ] } ]";
     public MapStyleOptions style = new MapStyleOptions(styleString);
 
     // API Client
@@ -154,7 +166,9 @@ public class MainActivity extends AppCompatActivity {
         Backendless.initApp(this, BACKENDLESS_APP_ID, BACKENDLESS_SECRET_KEY, appVersion);
 
         myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        Log.d(TAG, "LoginVariable = " + loginT); //Printf checking if logged in
         setSupportActionBar(myToolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(n);
@@ -473,10 +487,9 @@ public class MainActivity extends AppCompatActivity {
             mMap = googleMap;
             mMap.setOnMapClickListener(n);
             mMap.setOnMarkerClickListener(n);
-
             // Bottom Toolbar Button Listeners
             mUserButton.setOnClickListener(new OnClickListener() {
-                public void onClick(View v) {startActivity(new Intent(MainActivity.this, Splash.class));}});
+                public void onClick(View v) {toLoginActivity(null);}});
             mCameraButton.setOnClickListener(new OnClickListener() {
                 public void onClick(View v) {launchCameraIntent(null);}});
             mNearbyButton.setOnClickListener(new OnClickListener() {

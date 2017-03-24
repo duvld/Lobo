@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_login"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:background="@color/colorPrimary"
+    tools:context="com.example.angietong.lobo.R_L.LoginActivity">
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="100dp" />
+
+    <TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
+    android:textSize="60sp"
+    android:text="AAKIM"
+    android:textColor="@color/white"
+    android:textStyle="bold"
+    />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:textSize="40sp"
+        android:text="Login"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="60dp" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColorHint="@color/colorAccent"
+        android:layout_marginLeft="32dp"
+        android:layout_marginRight="32dp"
+        android:background="@drawable/edittext_login_form"
+        android:hint="Username"
+        android:id="@+id/loginActivityUsernameTF"
+        android:singleLine="true" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColorHint="@color/colorAccent"
+        android:layout_marginLeft="32dp"
+        android:layout_marginRight="32dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/edittext_login_form"
+        android:inputType="textPassword"
+        android:hint="Password"
+        android:id="@+id/loginActivityPasswordTF"
+        android:singleLine="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="32dp"
+        android:layout_marginTop="90dp"
+        android:layout_marginRight="32dp"
+        android:background="@drawable/button_login_form"
+        android:textColor="@color/white"
+        android:text="Login"
+        android:id="@+id/loginActivityLoginButton"
+        android:onClick="Login" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="15dp"
+        android:text="Don't have an account?" />
+    <!--
+    <View
+        android:layout_width="150dp"
+        android:layout_height="0.5dp"
+        android:background="@android:color/darker_gray"
+        android:layout_marginTop="2dp"
+        android:layout_centerHorizontal="true"/>-->
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:textColor="@color/white"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="5dp"
+        android:text="Sign up now"
+        android:clickable="true"
+        android:onClick="toRegisterActivity"/>
+
+
+</LinearLayout>

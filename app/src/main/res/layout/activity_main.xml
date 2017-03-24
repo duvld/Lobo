@@ -22,8 +22,7 @@
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
         android:elevation="4dp"
-        android:theme="@style/ThemeOv
-        erlay.AppCompat.ActionBar"/>
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"/>
 
     <!-- Map Fragment -->
     <fragment
@@ -54,7 +53,7 @@
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:layout_below="@+id/toolbar"
         android:orientation="vertical"
-        android:background="#007733">
+        android:background="@color/colorPrimary">
 
         <EditText
             android:id="@+id/prePostTitleTextView"
@@ -102,6 +101,7 @@
         </RelativeLayout>
 
     </RelativeLayout>
+
 </RelativeLayout>
 
     <RelativeLayout
@@ -111,7 +111,7 @@
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_alignParentTop="true"
-        android:background="#006622"
+        android:background="@color/colorPrimary"
         android:id="@+id/activity_miniPost">
 
         <ImageView
@@ -188,7 +188,7 @@
             android:layout_height="100dp"
             android:layout_alignParentTop="true"
             android:weightSum="3"
-            android:background="#006622">
+            android:background="@color/colorPrimary">
 
             <ImageView
                 android:id="@+id/userButton"
@@ -197,7 +197,7 @@
                 android:clickable="true"
                 android:layout_width="150dp"
                 android:layout_height="100dp"
-                android:padding="15dp"
+                android:padding="25dp"
                 android:layout_alignParentLeft="true"/>
 
             <ImageView
@@ -207,6 +207,7 @@
                 android:clickable="true"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
+                android:padding="5dp"
                 android:layout_centerHorizontal="true"/>
 
             <ImageView
@@ -216,7 +217,7 @@
                 android:clickable="true"
                 android:layout_width="150dp"
                 android:layout_height="100dp"
-                android:padding="10dp"
+                android:padding="20dp"
                 android:layout_alignParentEnd="true"/>
 
         </RelativeLayout>
