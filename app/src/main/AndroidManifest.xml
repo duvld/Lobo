@@ -32,6 +32,8 @@
         <activity android:name=".UI.MainActivity" />
         <activity android:name=".UI.PostActivity" />
         <activity android:name=".UI.nearbyActivity" />
+        <activity android:name=".R_L.LoginActivity"/>
+        <activity android:name=".R_L.RegisterActivity" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"

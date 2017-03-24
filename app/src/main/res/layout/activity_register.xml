@@ -11,7 +11,7 @@ tools:context="com.example.angietong.lobo.R_L.RegisterActivity">
 
 <Space
     android:layout_width="match_parent"
-    android:layout_height="50dp" />
+    android:layout_height="100dp" />
 
     <TextView
         android:layout_width="match_parent"
@@ -35,8 +35,7 @@ tools:context="com.example.angietong.lobo.R_L.RegisterActivity">
     android:layout_marginRight="32dp"
     android:background="@drawable/edittext_login_form"
     android:id="@+id/registerActivityUsername"
-    android:hint="Username" />
-    android:singleLine="true" />
+    android:hint="Username"/>
 
 <EditText
     android:layout_width="match_parent"
@@ -111,13 +110,7 @@ tools:context="com.example.angietong.lobo.R_L.RegisterActivity">
         android:layout_marginTop="15dp"
         android:gravity="center_horizontal"
         android:text="Already have an account?"
-        android:textColor="@android:color/darker_gray" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="@android:color/darker_gray"
-        android:layout_marginTop="2dp"/>
+        android:textColor="@color/colorAccent" />
 
     <TextView
         android:layout_width="match_parent"
@@ -126,7 +119,7 @@ tools:context="com.example.angietong.lobo.R_L.RegisterActivity">
         android:textColor="@color/white"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:layout_marginTop="2dp"
+        android:layout_marginTop="5dp"
         android:text="Sign In"
         android:clickable="true"
         android:onClick="toLoginActivity"/>
