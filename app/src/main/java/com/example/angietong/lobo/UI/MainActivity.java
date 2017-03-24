@@ -413,8 +413,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void commentsListView() {
-        String[] fakeComments = {"wow", "much fake", "ian eats sausage", "lul", "kiam eats tofu", "moegoe360 eats hummus",
-                "anji eats rice", "anji eats rice", "anji eats rice", "anji eats rice"};
+        String[] fakeComments = {"Wow, I was just there!", "I think this post had opposite effect as intended ;P", "Vary Nice!", "Too many bowls of that green, no lucky charms", "kiam eats tofu", "moegoe360 eats hummus",
+                "anji eats rice", "P.S.A DONT FALL IN LOVE", "I can't believe Rick Santorm and Paul Ryan are catholic", "I need some strong men to move my bed from my 3rd floor apartment basement; i will pay"};
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(
                 this,
